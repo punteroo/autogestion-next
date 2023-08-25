@@ -1,30 +1,178 @@
 "use client";
 
-import { Avatar, Card, CardBody, CardHeader, Divider } from "@nextui-org/react";
+import {
+  Avatar,
+  Button,
+  Card,
+  CardBody,
+  CardHeader,
+  Divider,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalHeader,
+  useDisclosure,
+} from "@nextui-org/react";
+import { useEffect, useState } from "react";
+import { PollEntry } from "autogestion-frvm/types";
+import axios from "axios";
+import SurveyEntry from "./SurveyEntry";
+import SurveyEntryContainer from "./SurveyEntryContainer";
+
+/**
+ * A poll entry is a poll that is available for the user to complete.
+ *
+ * This type sorts them between quarters.
+ */
+type SurveyEntryPoll = {
+  [quarter: string]: Array<PollEntry>;
+};
 
 export default function SurveysPanel() {
+  const [loading, isLoading] = useState<boolean>(true);
+
+  /** Lists all available polls. */
+  const [polls, setPolls] = useState<SurveyEntryPoll>({});
+
+  /** Holds a list of completed polls. */
+  const [completedPolls, setCompletedPolls] = useState<PollEntry[]>([]);
+
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+
+  useEffect(() => {
+    async function fetchPolls() {
+      isLoading(true);
+
+      try {
+        const { data } = await axios<PollEntry[]>({
+          method: "GET",
+          url: "/api/autogestion/polls",
+        });
+
+        // Order polls by type and set their corresponding status.
+        const polls: SurveyEntryPoll = {};
+
+        for (const poll of data) {
+          // If the poll is completed, assign it to the "completed" section and skip it.
+          if (poll?.encuestaRealizada) {
+            setCompletedPolls((prev) => [...prev, poll]);
+            continue;
+          }
+
+          // Set the quarter.
+          const quarter = poll?.cargoDocente?.tipoDictado?.nombre;
+
+          if (!polls[quarter]) polls[quarter] = [poll];
+          else polls[quarter].push(poll);
+        }
+
+        // Set the new polls.
+        setPolls(polls);
+
+        isLoading(false);
+      } catch (e) {
+        console.error(e);
+        throw e;
+      }
+    }
+
+    if (completedPolls?.length < 1 && Object.keys(polls)?.length < 1)
+      fetchPolls();
+  });
+
   return (
     <div className="flex flex-col items-center justify-center mx-4 gap-4">
       <h1 className="my-4 text-xl font-bold">Encuestas Docentes</h1>
-      <Card className="w-full">
-        <CardHeader className="justify-between">
-          <div className="flex gap-5">
-            <Avatar isBordered radius="full" size="md" src="/avatar.jpg" />
-            <div className="flex flex-col gap-1 items-start justify-center">
-              <h4 className="text-small font-semibold leading-none text-default-600">
-                PEREYRA, ALEJANDRO
-              </h4>
-              <h5 className="text-small font-normal leading-none text-default-500">
-                Economía - Titular
-              </h5>
-            </div>
-          </div>
-        </CardHeader>
-        <Divider />
-        <CardBody>
 
-        </CardBody>
+      <Modal
+        isOpen={isOpen}
+        onOpenChange={onOpenChange}
+        backdrop="blur"
+        scrollBehavior="inside"
+        size="3xl"
+        placement="center"
+      >
+        <ModalContent>
+          {(onClose) => (
+            <>
+              <ModalHeader className="flex flex-col gap-1">
+                Encuestas Realizadas
+              </ModalHeader>
+              <ModalBody>
+                <div className="flex flex-col gap-4">
+                  {completedPolls?.length > 0 ? (
+                    completedPolls?.map((poll, i) => {
+                      return (
+                        <SurveyEntry
+                          key={i}
+                          firstName={poll.persona.nombre}
+                          lastName={poll.persona.apellido}
+                          course={
+                            poll.cargoDocente?.asignatura?.nombre ?? "Sin Curso"
+                          }
+                          role={
+                            poll.cargoDocente?.tipoCargoDocente?.nombre ??
+                            "Sin Rol"
+                          }
+                          isDone={true}
+                        />
+                      );
+                    })
+                  ) : (
+                    <div className="p-4">
+                      <h2 className="text-center font-semibold text-foreground-300">
+                        No contestaste ninguna encuesta todavía.
+                      </h2>
+                    </div>
+                  )}
+                </div>
+              </ModalBody>
+            </>
+          )}
+        </ModalContent>
+      </Modal>
+
+      <Card className="w-full">
+        <CardHeader>
+          <Button
+            className="w-full text-foreground"
+            color="warning"
+            isDisabled={completedPolls?.length > 0 && completedPolls === null}
+            onClick={onOpen}
+          >
+            Ver Encuestas Realizadas
+          </Button>
+        </CardHeader>
       </Card>
+
+      {Object.keys(polls)?.length > 0 ? (
+        Object.keys(polls)?.map((quarter, i) => {
+          return (
+            <SurveyEntryContainer key={i} name={quarter}>
+              {polls[quarter]?.map((poll, i) => {
+                return (
+                  <SurveyEntry
+                    key={i}
+                    firstName={poll.persona.nombre}
+                    lastName={poll.persona.apellido}
+                    course={poll.cargoDocente.asignatura.nombre}
+                    role={poll.cargoDocente.tipoCargoDocente.nombre}
+                    isDone={poll.encuestaRealizada}
+                  />
+                );
+              })}
+            </SurveyEntryContainer>
+          );
+        })
+      ) : (
+        <Card className="w-full">
+          <CardBody>
+            <h2 className="text-center font-semibold text-foreground-300">
+              No hay encuestas disponibles.
+            </h2>
+          </CardBody>
+        </Card>
+      )}
     </div>
   );
 }
