@@ -1,4 +1,14 @@
-/** @type {import('next').NextConfig} */
-const nextConfig = {}
+const path = require("path");
 
-module.exports = nextConfig
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  //output: "export",
+  swcMinify: false,
+  // TODO: see if removing this allows to use the package normally
+  webpack: (config) => {
+    config.resolve.preferRelative = true;
+    return config;
+  },
+};
+
+module.exports = nextConfig;
