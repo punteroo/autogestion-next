@@ -63,7 +63,7 @@ export default function NavBar() {
     metadata?: ClientSection;
   }> = [
     {
-      name: "Mis Datos",
+      name: "Mi Cuenta",
       icon: <UserIcon />,
       href: "/profile",
     },
