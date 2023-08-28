@@ -3,6 +3,8 @@ import { UserSession, auth } from "../../../auth/[...nextauth]/route";
 import { buildClient } from "../../client.wrapper";
 import { NextResponse } from "next/server";
 
+export const runtime = 'edge';
+
 export async function GET(request: Request): Promise<NextResponse | Response> {
   try {
     // Fetch the user session.
