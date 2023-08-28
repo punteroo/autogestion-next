@@ -27,3 +27,5 @@ export async function GET(request: Request): Promise<NextResponse | Response> {
 
   return NextResponse.error();
 }
+
+export const dynamic = "force-dynamic";

@@ -22,3 +22,5 @@ export async function GET(): Promise<NextResponse | Response> {
 
   return NextResponse.error();
 }
+
+export const dynamic = "force-dynamic";
