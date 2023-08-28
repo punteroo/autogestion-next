@@ -52,10 +52,11 @@ export default function SurveysPanel() {
         // Order polls by type and set their corresponding status.
         const polls: SurveyEntryPoll = {};
 
+        const completed = [];
         for (const poll of data) {
           // If the poll is completed, assign it to the "completed" section and skip it.
           if (poll?.encuestaRealizada) {
-            setCompletedPolls((prev) => [...prev, poll]);
+            completed.push(poll);
             continue;
           }
 
@@ -68,6 +69,7 @@ export default function SurveysPanel() {
 
         // Set the new polls.
         setPolls(polls);
+        setCompletedPolls(completed);
 
         isLoading(false);
       } catch (e) {
