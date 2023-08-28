@@ -19,8 +19,6 @@ export async function GET(request: Request): Promise<NextResponse | Response> {
       // Return the academic data.
       return NextResponse.json([...academic]);
     }
-
-    return NextResponse.error();
   } catch (e) {
     console.error(e);
   }
