@@ -67,12 +67,12 @@ export default function NavBar() {
       icon: <UserIcon />,
       href: "/profile",
     },
-    /* {
+    {
       name: "Mi Estado Académico",
       section: "estadoAcademico",
       icon: <BookIcon />,
       href: "/courses",
-    }, */
+    },
     {
       name: "Mis Materias",
       section: "materiasCursando",
