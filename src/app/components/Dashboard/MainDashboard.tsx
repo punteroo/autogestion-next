@@ -10,7 +10,7 @@ export default async function MainDashboard({
 }) {
   const session = await getServerSession(auth);
 
-  if (!session || !session?.user) return redirect('/login');
+  if (!session || !session?.user) return redirect("/login");
 
   return (
     <main className="dark text-foreground bg-background">
