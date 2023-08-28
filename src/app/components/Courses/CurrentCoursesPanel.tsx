@@ -51,7 +51,7 @@ export default function TakenCoursesPanel() {
     }
 
     if (courses?.length < 1) fetchCourses();
-  });
+  }, [courses]);
 
   return (
     <div className="flex flex-col items-center justify-center mx-4 gap-4">

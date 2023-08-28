@@ -44,7 +44,7 @@ export default function TakenExamsPanel() {
     }
 
     if (exams?.length < 1) fetchExams();
-  });
+  }, [exams]);
 
   function mapNumberNameToNumber(numberName: string): number | string {
     switch (numberName) {

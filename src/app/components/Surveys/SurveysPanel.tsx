@@ -80,7 +80,7 @@ export default function SurveysPanel() {
 
     if (completedPolls?.length < 1 && Object.keys(polls)?.length < 1)
       fetchPolls();
-  });
+  }, [polls, completedPolls]);
 
   return (
     <div className="flex flex-col items-center justify-center mx-4 gap-4">

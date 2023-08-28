@@ -12,8 +12,6 @@ import {
   Modal,
   ModalBody,
   ModalContent,
-  ModalFooter,
-  ModalHeader,
 } from "@nextui-org/react";
 import { UserIcon } from "./Icons/UserIcon";
 import { BookIcon } from "./Icons/BookIcon";
@@ -95,7 +93,7 @@ export default function NavBar() {
 
     if (sections?.length < 1 || typeof sections === "undefined")
       fetchSections();
-  });
+  }, [sections, setSections]);
 
   const menuItems: Array<{
     section?: ClientSection["nombreSeccion"];
