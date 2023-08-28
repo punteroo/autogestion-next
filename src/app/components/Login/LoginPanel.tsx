@@ -2,7 +2,7 @@
 
 import { getSections } from "@/app/api/autogestion/client.wrapper";
 import { DashboardContext } from "@/app/context/DashboardContext";
-import { ClientSection } from "autogestion-frvm/dist/packages/client";
+import { ClientSection } from "autogestion-frvm/client";
 import { signIn } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";

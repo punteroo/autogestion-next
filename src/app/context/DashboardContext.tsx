@@ -1,6 +1,6 @@
 'use client';
 
-import { ClientSection } from "autogestion-frvm/dist/packages/client";
+import { ClientSection } from "autogestion-frvm/client";
 import { createContext, useState } from "react";
 
 type DashboardContextType = {
