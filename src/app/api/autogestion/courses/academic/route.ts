@@ -2,6 +2,9 @@ import { UserSession, auth } from "../../../auth/[...nextauth]/route";
 import { buildClient } from "../../client.wrapper";
 import { NextResponse } from "next/server";
 
+// NOTE: This is PURELY for the Vercel deployment. Remove this when on development.
+export const runtime = 'edge';
+
 export async function GET(request: Request): Promise<NextResponse | Response> {
   try {
     // Fetch the user session.
