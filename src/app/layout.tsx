@@ -1,6 +1,5 @@
 import "./globals.css";
 import type { Metadata } from "next";
-import { getServerSession } from "next-auth";
 import { Inter } from "next/font/google";
 import { auth } from "./api/auth/[...nextauth]/route";
 import NextAuth from "./components/SessionProvider";
@@ -19,7 +18,7 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const session = await getServerSession(auth);
+  const session = await auth();
 
   return (
     <html lang="en">

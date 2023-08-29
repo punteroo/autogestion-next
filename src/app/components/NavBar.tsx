@@ -16,7 +16,6 @@ import {
 import { UserIcon } from "./Icons/UserIcon";
 import { BookIcon } from "./Icons/BookIcon";
 import { useSession } from "next-auth/react";
-import { UserSession } from "../api/auth/[...nextauth]/route";
 import { ClientSection } from "autogestion-frvm/client";
 import Link from "next/link";
 import { DashboardContext } from "../context/DashboardContext";
@@ -61,7 +60,7 @@ function useWindowSize() {
 
 export default function NavBar() {
   const { data: session } = useSession();
-  const user = session?.user as UserSession;
+  const user = session?.user!;
 
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
   const [isMobile, setIsMobile] = useState<boolean>(false);

@@ -1,6 +1,6 @@
 import { NextAuth_ProviderName } from "@/objects/next-auth.literals";
 import Autogestion from "autogestion-frvm";
-import type { AuthOptions } from "next-auth";
+import type { NextAuthConfig } from "next-auth";
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 
@@ -17,17 +17,17 @@ export interface UserSession {
   };
 }
 
-export const auth: AuthOptions = {
+export const authOptions: NextAuthConfig = {
   callbacks: {
     async jwt({ token, user }) {
       // Assign the user to the token.
-      if (user) token.user = user;
+      if (user) token = { ...token, ...user };
 
       return token;
     },
     async session({ session, token }) {
       // Assign the user to the session.
-      if (token?.user) session.user = token.user;
+      if (token?.user) session.user = token.user as any;
 
       return session;
     },
@@ -47,7 +47,10 @@ export const auth: AuthOptions = {
         // Authenticate the user with the Autogestion client.
         const { academicId, password } = credentials;
 
-        const client = new Autogestion(academicId, password);
+        const client = new Autogestion(
+          academicId as string,
+          password as string
+        );
 
         try {
           // Try to login.
@@ -60,8 +63,8 @@ export const auth: AuthOptions = {
             alumno: { especialidad },
           } = persona;
 
-          const user: UserSession & { id: any } = {
-            id: academicId,
+          const user: UserSession & { id: string } = {
+            id: academicId as string,
             academicId: +academicId,
             firstName: persona.nombre,
             lastName: persona.apellido,
@@ -94,6 +97,7 @@ export const auth: AuthOptions = {
   },
 };
 
-const authHandler = NextAuth(auth);
-
-export { authHandler as GET, authHandler as POST };
+export const {
+  handlers: { GET, POST },
+  auth,
+} = NextAuth(authOptions);

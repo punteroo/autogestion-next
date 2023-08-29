@@ -1,4 +1,3 @@
-import { getServerSession } from "next-auth";
 import { UserSession, auth } from "../../auth/[...nextauth]/route";
 import { buildClient } from "../client.wrapper";
 import { NextResponse } from "next/server";
@@ -6,7 +5,7 @@ import { NextResponse } from "next/server";
 export async function GET(): Promise<NextResponse | Response> {
   try {
     // Fetch the user session.
-    const session = await getServerSession(auth);
+    const session = await auth();
 
     if (session?.user) {
       // Build a new client and send sections.
