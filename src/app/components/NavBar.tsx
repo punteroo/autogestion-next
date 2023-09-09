@@ -132,6 +132,12 @@ export default function NavBar() {
       href: "/exams",
     },
     {
+      name: "Inscripción a Exámenes",
+      section: "inscripcionExamen",
+      icon: <AcademicIcon />,
+      href: "/exams/inscription",
+    },
+    {
       name: "Encuestas Docentes",
       section: "encuestas",
       icon: <DocumentCheckIcon />,

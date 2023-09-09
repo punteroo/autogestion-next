@@ -17,25 +17,15 @@ import {
   TableRow,
   Chip,
 } from "@nextui-org/react";
-import { StudentCourse } from "autogestion-frvm/courses";
+import { CourseStatus, StudentCourse } from "autogestion-frvm/courses";
 import axios from "axios";
 import { useState } from "react";
 
 function HistoricCourseStatus({ course }: { course: StudentCourse }) {
-  enum CourseStatus {
-    CURSANDO = "0",
-
-    LIBRE = "1",
-
-    REGULAR = "3",
-
-    APROBADO = "4",
-  }
-
   const data: { styles?: string; name?: string } = {};
 
   switch (course.estado as string) {
-    case CourseStatus.CURSANDO: {
+    case CourseStatus.ACTIVE: {
       data.styles = "bg-yellow-200 text-yellow-600";
       data.name = "Cursando";
       break;
@@ -45,14 +35,19 @@ function HistoricCourseStatus({ course }: { course: StudentCourse }) {
       data.name = "Libre";
       break;
     }
+    case CourseStatus.APROBADA: {
+      data.styles = "bg-green-200 text-green-600";
+      data.name = "Aprobada";
+      break;
+    }
     case CourseStatus.REGULAR: {
       data.styles = "bg-blue-200 text-blue-600";
       data.name = "Regular";
       break;
     }
-    case CourseStatus.APROBADO: {
-      data.styles = "bg-green-200 text-green-600";
-      data.name = "Aprobada";
+    case CourseStatus.PROMOCIONADA: {
+      data.styles = "bg-green-400 text-green-800";
+      data.name = "Promocionada";
       break;
     }
   }

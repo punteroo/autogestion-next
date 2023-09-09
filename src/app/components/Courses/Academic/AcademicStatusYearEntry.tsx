@@ -11,15 +11,14 @@ import {
   TableRow,
   TableCell,
   Chip,
-  Link,
 } from "@nextui-org/react";
 import { AcademicStatusEntry } from "autogestion-frvm/types";
-import HistoricCourses from "../HistoricCourses";
 import AcademicStatusYearEntryDetails from "./AcademicStatusYearEntryDetails";
+import { AcademicEntry } from "@/types/api/academic.entry";
 
 type AcademicStatusYearEntryProps = {
   year: number;
-  courses: AcademicStatusEntry[];
+  courses: AcademicEntry[];
 };
 
 export default function AcademicStatusYearEntry({
@@ -44,9 +43,8 @@ export default function AcademicStatusYearEntry({
   }
 
   function processCourseStatus(
-    status: AcademicStatusEntry["estadoMateria"],
-    visualStatus: AcademicStatusEntry["estado"],
-    grade?: AcademicStatusEntry["nota"]
+    status: AcademicEntry['status'],
+    grade?: number,
   ): React.ReactNode {
     // Classify course status depending on what the course has set.
     switch (status) {
@@ -74,20 +72,18 @@ export default function AcademicStatusYearEntry({
             Libre
           </Chip>
         );
-      case "REGULARIZADA": {
-        // If the course is regularized, check if it was also passed directly (promoted)
-        const [visual, year] = /[A|a]p\. Directa en ([0-9]{4})/g.exec(
-          visualStatus!
-        )!;
-
-        return year ? (
+      case "PROMOCIONADA": {
+        return (
           <Chip
             size="sm"
             className="text-xs px-1.5 bg-green-400 text-green-800"
           >
             Promocionada
           </Chip>
-        ) : (
+        );
+      }
+      case "REGULARIZADA": {
+        return (
           <Chip size="sm" className="text-xs px-1.5 bg-blue-400 text-blue-800">
             Regular
           </Chip>
@@ -124,19 +120,18 @@ export default function AcademicStatusYearEntry({
           </TableHeader>
           <TableBody>
             {courses.map((course) => (
-              <TableRow key={course.nombreMateria}>
+              <TableRow key={course.name}>
                 <TableCell>
-                  {course.nombreMateria} ({course.plan})
+                  {course.name} ({course.plan})
                 </TableCell>
                 <TableCell className="w-full break-keep">
                   {processCourseStatus(
-                    course.estadoMateria,
-                    course.estado,
-                    course.nota
+                    course.status,
+                    course.grade
                   )}
                 </TableCell>
                 <TableCell>
-                  {course.estadoMateria === "CURSANDO" ? (
+                  {course.status === "CURSANDO" ? (
                     <p className="text-center text-foreground-400">N/A</p>
                   ) : (
                     <AcademicStatusYearEntryDetails course={course} />
