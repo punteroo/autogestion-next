@@ -93,7 +93,7 @@ export default function LoginPanel({ providerName }: { providerName: string }) {
             setSections(data as Array<ClientSection>);
 
             // Redirect in a few seconds.
-            setTimeout(() => router.push("/"), 3500);
+            setTimeout(() => router.push("/"), 1500);
 
             return "Gracias por iniciar sesión. Ya te redireccionamos...";
           },

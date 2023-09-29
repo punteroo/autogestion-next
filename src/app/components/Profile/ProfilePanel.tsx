@@ -13,21 +13,27 @@ export default function ProfilePanel() {
     <div className="flex flex-col items-center justify-center mx-4 gap-4">
       <h1 className="my-4 text-xl font-bold">Mi Cuenta</h1>
       <Card className="w-full">
-        <CardHeader className="flex gap-3">
-          <div className="flex flex-col">
-            <p className="text-md">
-              {user.lastName}, {user.firstName}
-            </p>
-            <p className="text-small text-default-500">{user.career.name}</p>
-          </div>
-        </CardHeader>
-        <Divider />
-        <CardBody>
-          <div className="flex flex-col">
-            <p className="text-md">Legajo #{user.academicId}</p>
-            <p className="text-small text-default-500">DNI {user.dni}</p>
-          </div>
-        </CardBody>
+        {user ? (
+          <>
+            <CardHeader className="flex gap-3">
+              <div className="flex flex-col">
+                <p className="text-md">
+                  {user?.lastName}, {user?.firstName}
+                </p>
+                <p className="text-small text-default-500">
+                  {user?.career?.name}
+                </p>
+              </div>
+            </CardHeader>
+            <Divider />
+            <CardBody>
+              <div className="flex flex-col">
+                <p className="text-md">Legajo #{user?.academicId}</p>
+                <p className="text-small text-default-500">DNI {user?.dni}</p>
+              </div>
+            </CardBody>
+          </>
+        ) : null}
       </Card>
 
       <Card className="w-full">

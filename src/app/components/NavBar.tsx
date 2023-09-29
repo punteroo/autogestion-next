@@ -207,7 +207,7 @@ export default function NavBar() {
         <NavbarMenu>
           <NavbarMenuItem>
             <h2 className="text-center font-bold text-foreground">
-              ¿Cómo estás {user.firstName}?
+              ¿Cómo estás {user?.firstName ?? 'alumno'}?
             </h2>
           </NavbarMenuItem>
           {filteredSections.map((item, index) => (
@@ -227,7 +227,7 @@ export default function NavBar() {
                     {item.name}
                   </Button>
                 ) : (
-                  <Link href={item.href}>
+                  <Link href={item.href} passHref>
                     <Button
                       className="w-full"
                       color={(item?.color as any) ?? "default"}
