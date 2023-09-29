@@ -102,7 +102,7 @@ export default function CurrentCourseGrades({
         </ModalContent>
       </Modal>
 
-      <Link showAnchorIcon={true} onClick={onOpen}>
+      <Link onClick={onOpen}>
         Ver
       </Link>
     </>

@@ -85,6 +85,17 @@ export default function TakenExamsPanel() {
     }
   }
 
+  function parseStatusName(
+    status: ExamEntry["estadoAprobacion"]
+  ): "APROBADO" | "DESAPROBADO" | "AUSENTE" {
+    switch (status) {
+      case "NO_APROBADO":
+        return "DESAPROBADO";
+      default:
+        return status;
+    }
+  }
+
   return (
     <div className="flex flex-col items-center justify-center mx-4 gap-4">
       <h1 className="my-4 text-xl font-bold">Mis Exámenes Rendidos</h1>
@@ -126,7 +137,7 @@ export default function TakenExamsPanel() {
                           : "bg-red-200 text-red-600"
                       }`}
                     >
-                      {exam.estadoAprobacion}
+                      {parseStatusName(exam.estadoAprobacion)}
                     </Chip>
                   </TableCell>
                 </TableRow>
