@@ -203,9 +203,19 @@ export default function LoginPanel({ providerName }: { providerName: string }) {
           </p>
           <br />
           <p>
-            Si estás dudando de la vericidad de tus datos, el proyecto es
-            open-source. No persiste ningún dato de sus usuarios más que
-            redireccionarlos hacia el Web Service de Autogestión.
+            No se persisten datos de los usuarios más que redireccionarlos hacia
+            el Web Service de Autogestión.
+          </p>
+          <br />
+          <p>
+            El proyecto hace uso de un wrapper no oficial de la API de
+            autogestión escrito por mí en Typescript.
+          </p>
+          <br />
+          <p>
+            Por petición de la UTN FRVM, tengo prohibido distribuir tanto el
+            código de este front como el wrapper de la API de Autogestión (ambos
+            en Typescript).
           </p>
         </div>
         <div className="bg-slate-300 h-0.5 w-full my-4"></div>
