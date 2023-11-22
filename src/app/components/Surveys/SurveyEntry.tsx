@@ -11,6 +11,9 @@ import {
 import { DocumentCheckIcon } from "../Icons/DocumentCheckIcon";
 import { WriteIcon } from "../Icons/WriteIcon";
 import { CheckIcon } from "../Icons/CheckIcon";
+import Link from "next/link";
+import NextLinkWrapper from "../Utility/NextLinkWrapper";
+import { PollEntry } from "autogestion-frvm/types";
 
 type SurveyEntryProps = {
   firstName: string;
@@ -18,6 +21,7 @@ type SurveyEntryProps = {
   course: string;
   role: string;
   isDone: boolean;
+  entry?: PollEntry;
 };
 
 export default function SurveyEntry({
@@ -26,6 +30,7 @@ export default function SurveyEntry({
   course,
   role,
   isDone,
+  entry,
 }: SurveyEntryProps) {
   return (
     <Card className="w-full">
@@ -54,14 +59,17 @@ export default function SurveyEntry({
             Encuesta Realizada
           </Button>
         ) : (
-          <Button
-            color="primary"
-            variant="bordered"
-            isDisabled
-            startContent={<WriteIcon />}
-          >
-            Realizar Encuesta
-          </Button>
+          <NextLinkWrapper disabled={isDone} href="/surveys/flow" data={entry}>
+            <Button
+              className="w-full"
+              color="primary"
+              variant="bordered"
+              isDisabled={isDone}
+              startContent={<WriteIcon />}
+            >
+              Realizar Encuesta
+            </Button>
+          </NextLinkWrapper>
         )}
       </CardBody>
     </Card>

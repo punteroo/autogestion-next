@@ -11,6 +11,7 @@ import {
   ModalBody,
   ModalContent,
   ModalHeader,
+  Spinner,
   useDisclosure,
 } from "@nextui-org/react";
 import { useEffect, useState } from "react";
@@ -160,12 +161,24 @@ export default function SurveysPanel() {
                     course={poll.cargoDocente.asignatura.nombre}
                     role={poll.cargoDocente.tipoCargoDocente.nombre}
                     isDone={poll.encuestaRealizada}
+                    entry={poll}
                   />
                 );
               })}
             </SurveyEntryContainer>
           );
         })
+      ) : loading ? (
+        <Card className="w-full">
+          <CardBody>
+            <div className="flex gap-x-2 items-center">
+              <Spinner color="primary" />
+              <h2 className="text-center font-semibold text-foreground-300">
+                Cargando encuestas...
+              </h2>
+            </div>
+          </CardBody>
+        </Card>
       ) : (
         <Card className="w-full">
           <CardBody>
