@@ -18,6 +18,12 @@ type PollAnswerFlowType = {
   /** An array of sorted questions by group. */
   questions?: PollFlowData;
 
+  /** An object that holds the full, original, parsed Poll entry. */
+  poll?: PollEntry;
+
+  /** State that holds the original questions for this survey. */
+  originalQuestions?: PollQuestions;
+
   /** State setter for the current flow's questions. */
   setQuestions: React.Dispatch<React.SetStateAction<PollFlowData>>;
 
@@ -61,9 +67,14 @@ export function PollAnswerFlowProvider({
   /** An array of sorted questions by group. */
   const [questions, setQuestions] = useState<PollFlowData>([]);
 
+  /** State that indicates the current question being answered. */
   const [currentQuestion, setCurrentQuestion] = useState<number>(0);
 
+  /** State that holds teacher and course information about the poll. */
   const [academicInfo, setAcademicInfo] = useState<PollAcademicInfo>();
+
+  /** State that keeps the original question data for the specific poll. */
+  const [originalQuestions, setOriginalQuestions] = useState<PollQuestions>();
 
   function resetPoll() {
     // Go back to the initial question.
@@ -77,6 +88,15 @@ export function PollAnswerFlowProvider({
   }
 
   function previousQuestion() {
+    // If the current question is the special type, set it back to the last question.
+    if (currentQuestion === -1) {
+      setCurrentQuestion(questions.length - 1);
+      return;
+    }
+
+    // Do not allow going back if the current question is the first one.
+    if (currentQuestion - 1 < 0 && currentQuestion !== -1) return;
+
     // Go back to the previous question.
     setCurrentQuestion(currentQuestion - 1);
   }
@@ -95,6 +115,12 @@ export function PollAnswerFlowProvider({
     // Update the questions.
     setQuestions(questions);
 
+    // If the next question is off bounds, set the current question to -1 as a special value.
+    if (currentQuestion + 1 >= questions.length) {
+      setCurrentQuestion(-1);
+      return;
+    }
+
     // Go to the next question.
     setCurrentQuestion(currentQuestion + 1);
   }
@@ -109,7 +135,7 @@ export function PollAnswerFlowProvider({
           data: poll,
         });
 
-        console.log(data.detalles);
+        setOriginalQuestions(data);
 
         // Extract academic information from teachers.
         const academicInfo: PollAcademicInfo = {
@@ -156,6 +182,8 @@ export function PollAnswerFlowProvider({
     <PollAnswerFlowContext.Provider
       value={{
         questions,
+        poll,
+        originalQuestions,
         setQuestions,
         answerQuestion,
         previousQuestion,
