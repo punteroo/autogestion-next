@@ -1,21 +1,11 @@
 "use client";
 
-import {
-  Card,
-  CardHeader,
-  Divider,
-  CardBody,
-  Button,
-} from "@nextui-org/react";
-import { useSession } from "next-auth/react";
+import { Card, CardHeader, Divider, CardBody, Button } from "@nextui-org/react";
 import { UserSession } from "../../api/auth/[...nextauth]/route";
 import { LockIcon } from "../Icons/LockIcon";
 import ProfileCard from "./ProfileCard";
 
-export default function ProfilePanel() {
-  const { data: session } = useSession();
-  const user = session?.user as UserSession;
-
+export default function ProfilePanel({ user }: { user: UserSession }) {
   return (
     <>
       <h1 className="hidden md:block text-3xl font-bold m-4 text-center">
@@ -24,7 +14,7 @@ export default function ProfilePanel() {
       <div className="flex max-md:flex-col items-center md:items-start justify-center md:justify-between md:flex mx-4 gap-4">
         <h1 className="my-4 text-xl font-bold md:hidden">Mi Cuenta</h1>
         <ProfileCard user={user} />
-        
+
         {/* <Card className="w-full">
           {user ? (
             <>
