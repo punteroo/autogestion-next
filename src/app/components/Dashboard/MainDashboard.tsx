@@ -13,12 +13,12 @@ export default async function MainDashboard({
   if (!session || !session?.user) return redirect("/login");
 
   return (
-    <div className="h-screen flex flex-col">
+    <div className="h-full flex flex-col">
       <main className="dark text-foreground bg-background md:mb-auto">
         <NavBar />
         <div className="w-full h-full py-4">{children}</div>
       </main>
-      <footer className="hidden md:block rounded-lg shadow bg-content1 m-4 bottom-0">
+      <footer className="hidden md:block rounded-lg shadow m-4">
         <div className="w-full max-w-screen-xl mx-auto p-4 md:py-8">
           <div className="sm:flex sm:items-center sm:justify-between">
             <div>

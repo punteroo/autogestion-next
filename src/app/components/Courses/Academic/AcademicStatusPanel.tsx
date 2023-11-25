@@ -126,7 +126,7 @@ export default function AcademicStatusPanel() {
     <div className="flex flex-col items-center justify-center mx-2 gap-4">
       <h1 className="my-4 text-xl font-bold">Mi Estado Académico</h1>
 
-      <Card className="w-full flex flex-col items-center justify-center mx-4 px-2 gap-y-2">
+      <Card className="w-full flex max-sm:flex-col items-center justify-center md:justify-between mx-4 px-2 gap-y-2">
         {loading ? (
           <div className="flex flex-col items-center justify-center p-4 gap-y-4 text-center">
             <Spinner />
