@@ -2,9 +2,9 @@ import AcademicStatusPanel from "../components/Courses/Academic/AcademicStatusPa
 import MainDashboard from "../components/Dashboard/MainDashboard";
 
 export default async function AcademicStatus() {
-    return (
-        <MainDashboard>
-            <AcademicStatusPanel />
-        </MainDashboard>
-    )
+  return (
+    <MainDashboard>
+      <AcademicStatusPanel />
+    </MainDashboard>
+  );
 }
