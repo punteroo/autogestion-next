@@ -12,6 +12,7 @@ import {
   Modal,
   ModalBody,
   ModalContent,
+  NavbarBrand,
 } from "@nextui-org/react";
 import { UserIcon } from "./Icons/UserIcon";
 import { BookIcon } from "./Icons/BookIcon";
@@ -23,53 +24,17 @@ import axios from "axios";
 import NavBarLogOut from "./NavBarLogOut";
 import { AcademicIcon } from "./Icons/AcademicIcon";
 import { DocumentCheckIcon } from "./Icons/DocumentCheckIcon";
-
-function useWindowSize() {
-  // Initialize state with undefined width/height so server and client renders match
-  // Learn more here: https://joshwcomeau.com/react/the-perils-of-rehydration/
-  const [windowSize, setWindowSize] = useState<{
-    width?: number;
-    height?: number;
-  }>({
-    width: undefined,
-    height: undefined,
-  });
-
-  useEffect(() => {
-    // only execute all the code below in client side
-    // Handler to call on window resize
-    function handleResize() {
-      // Set window width/height to state
-      setWindowSize({
-        width: window.innerWidth,
-        height: window.innerHeight,
-      });
-    }
-
-    // Add event listener
-    window.addEventListener("resize", handleResize);
-
-    // Call handler right away so state gets updated with initial window size
-    handleResize();
-
-    // Remove event listener on cleanup
-    return () => window.removeEventListener("resize", handleResize);
-  }, []); // Empty array ensures that effect is only run on mount
-  return windowSize;
-}
+import { motion } from "framer-motion";
+import { NexusLogo } from "./Icons/NexusLogo";
+import { usePathname } from "next/navigation";
 
 export default function NavBar() {
   const { data: session } = useSession();
   const user = session?.user!;
 
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
-  const [isMobile, setIsMobile] = useState<boolean>(false);
 
   const { sections, setSections } = useContext(DashboardContext);
-
-  // Disallow non-mobile devices.
-  const size = useWindowSize();
-  useEffect(() => setIsMobile(size.width! < 640), [size]);
 
   useEffect(() => {
     async function fetchSections() {
@@ -97,6 +62,7 @@ export default function NavBar() {
   const menuItems: Array<{
     section?: ClientSection["nombreSeccion"];
     name?: string;
+    shortName?: string;
     icon: any;
     href: string;
     color?: string;
@@ -104,17 +70,20 @@ export default function NavBar() {
   }> = [
     {
       name: "Mi Cuenta",
+      shortName: "Cuenta",
       icon: <UserIcon />,
       href: "/profile",
     },
     {
       name: "Mi Estado Académico",
+      shortName: "Estado Académico",
       section: "estadoAcademico",
       icon: <BookIcon />,
       href: "/courses",
     },
     {
       name: "Mis Materias",
+      shortName: "Materias",
       section: "materiasCursando",
       icon: <BookIcon />,
       href: "/courses/current",
@@ -127,18 +96,21 @@ export default function NavBar() {
     }, */
     {
       name: "Mis Exámenes",
+      shortName: "Exámenes",
       section: "examenes",
       icon: <AcademicIcon />,
       href: "/exams",
     },
     {
       name: "Inscripción a Exámenes",
+      shortName: "Inscripción Finales",
       section: "inscripcionExamen",
       icon: <AcademicIcon />,
       href: "/exams/inscription",
     },
     {
       name: "Encuestas Docentes",
+      shortName: "Encuestas",
       section: "encuestas",
       icon: <DocumentCheckIcon />,
       href: "/surveys",
@@ -162,43 +134,67 @@ export default function NavBar() {
     }
   }
 
+  // Obtain the current pathname.
+  const pathName = usePathname();
+
   return (
     <>
-      {isMobile ? null : (
-        <Modal
-          isOpen={true}
-          isDismissable={false}
-          hideCloseButton
-          isKeyboardDismissDisabled
-          size="full"
-        >
-          <ModalContent className="h-full">
-            <ModalBody className="text-center my-auto">
-              <div className="flex flex-col my-auto gap-12">
-                <h1 className="text-3xl font-bold">
-                  Dispositivo No Compatible
-                </h1>
-                <p>
-                  Esta aplicación no es compatible con dispositivos de
-                  escritorio.
-                </p>
-                <p>
-                  Por favor, ingrese a la aplicación desde un dispositivo móvil.
-                </p>
-              </div>
-            </ModalBody>
-          </ModalContent>
-        </Modal>
-      )}
-
       <Navbar onMenuOpenChange={setIsMenuOpen} shouldHideOnScroll>
         <NavbarContent>
           <NavbarMenuToggle
             aria-label={isMenuOpen ? "Close menu" : "Open menu"}
             className="sm:hidden"
           />
+          <NavbarBrand className="flex gap-4">
+            <NexusLogo />
+            <p className="font-bold text-inherit">NEXUS</p>
+          </NavbarBrand>
         </NavbarContent>
 
+        <motion.div
+          key={filteredSections.length}
+          initial={{
+            opacity: 0,
+            y: -5,
+          }}
+          animate={{
+            opacity: 1,
+            y: 0,
+          }}
+        >
+          <NavbarContent
+            className="hidden sm:flex gap-4 w-full"
+            justify="center"
+          >
+            {filteredSections.map((item, index) => (
+              <NavbarMenuItem
+                className="text-center w-full"
+                key={`${item.name}-${index}`}
+              >
+                {
+                  // If the section is not enabled, disable the item. Allow items that do not have an assigned section however, these are custom.
+                  !item.metadata?.habilitada && item?.section?.length ? (
+                    <span className="text-sm font-semibold text-foreground-400 cursor-not-allowed">
+                      {item?.shortName ?? item.name}
+                    </span>
+                  ) : (
+                    <Link href={item.href} passHref>
+                      <span
+                        className={`text-sm font-semibold ${
+                          pathName === item.href
+                            ? "text-blue-600"
+                            : "text-foreground"
+                        }`}
+                      >
+                        {item?.shortName ?? item.name}
+                      </span>
+                    </Link>
+                  )
+                }
+              </NavbarMenuItem>
+            ))}
+          </NavbarContent>
+        </motion.div>
         <NavbarContent justify="end">
           <NavbarItem>
             <NavBarLogOut />
@@ -207,7 +203,7 @@ export default function NavBar() {
         <NavbarMenu>
           <NavbarMenuItem>
             <h2 className="text-center font-bold text-foreground">
-              ¿Cómo estás {user?.firstName ?? 'alumno'}?
+              ¿Cómo estás {user?.firstName ?? "alumno"}?
             </h2>
           </NavbarMenuItem>
           {filteredSections.map((item, index) => (

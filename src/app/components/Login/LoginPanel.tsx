@@ -60,7 +60,10 @@ export default function LoginPanel({ providerName }: { providerName: string }) {
 
   // Disallow non-mobile devices.
   const size = useWindowSize();
-  useEffect(() => setIsMobile(size.width! < 640), [size]);
+  useEffect(
+    () => setIsMobile(true) /* setIsMobile(size.width! < 640) */,
+    [size]
+  );
 
   async function submitLogin() {
     setIsLoading(true);
@@ -154,7 +157,7 @@ export default function LoginPanel({ providerName }: { providerName: string }) {
         </Modal>
       )}
 
-      <div className="bg-slate-100 rounded-xl flex-col relative w-full p-8 m-auto text-black">
+      <div className="bg-slate-100 rounded-xl flex-col relative w-full md:w-[35%] p-8 m-auto text-black">
         <div className="text-center p-4">
           <h1 className="font-bold">Autogestión</h1>
           <h3>Inicia con tu legajo y contraseña</h3>
