@@ -6,11 +6,11 @@ import {
   Divider,
   CardBody,
   Button,
-  Avatar,
 } from "@nextui-org/react";
 import { useSession } from "next-auth/react";
 import { UserSession } from "../../api/auth/[...nextauth]/route";
 import { LockIcon } from "../Icons/LockIcon";
+import ProfileCard from "./ProfileCard";
 
 export default function ProfilePanel() {
   const { data: session } = useSession();
@@ -23,7 +23,9 @@ export default function ProfilePanel() {
       </h1>
       <div className="flex max-md:flex-col items-center md:items-start justify-center md:justify-between md:flex mx-4 gap-4">
         <h1 className="my-4 text-xl font-bold md:hidden">Mi Cuenta</h1>
-        <Card className="w-full">
+        <ProfileCard user={user} />
+        
+        {/* <Card className="w-full">
           {user ? (
             <>
               <CardHeader className="flex gap-3">
@@ -55,7 +57,7 @@ export default function ProfilePanel() {
               </CardBody>
             </>
           ) : null}
-        </Card>
+        </Card> */}
 
         <Card className="w-full">
           <CardHeader>
