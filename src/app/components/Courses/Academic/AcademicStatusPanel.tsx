@@ -9,6 +9,7 @@ import {
   Divider,
   Progress,
   Spinner,
+  Tooltip,
 } from "@nextui-org/react";
 import axios from "axios";
 import { useEffect, useState } from "react";
@@ -124,9 +125,11 @@ export default function AcademicStatusPanel() {
 
   return (
     <div className="flex flex-col items-center justify-center mx-2 gap-4">
-      <h1 className="my-4 text-xl font-bold">Mi Estado Académico</h1>
+      <h1 className="my-4 text-xl md:text-3xl font-bold">
+        Mi Estado Académico
+      </h1>
 
-      <Card className="w-full flex max-sm:flex-col items-center justify-center md:justify-between mx-4 px-2 gap-y-2">
+      <Card className="max-sm:w-full flex max-sm:flex-col items-center justify-center md:justify-between mx-4 px-2 gap-y-2">
         {loading ? (
           <div className="flex flex-col items-center justify-center p-4 gap-y-4 text-center">
             <Spinner />
@@ -141,7 +144,7 @@ export default function AcademicStatusPanel() {
           />
         ) : (
           <>
-            <Card className="mt-4">
+            <Card className="mt-4 md:w-full">
               <CardHeader>
                 <h1 className="text-center text-base font-bold">
                   Estadísticas
@@ -175,7 +178,14 @@ export default function AcademicStatusPanel() {
                 <div className="w-full py-4">
                   <Progress
                     color="success"
-                    label="Progreso de Carrera"
+                    label={
+                      <Tooltip content="Materias aprobadas y promocionadas sobre la totalidad de materias cursables.">
+                        <p className="md:text-blue-300">
+                          Progreso de Carrera
+                          <sup className="opacity-0 md:opacity-100">?</sup>
+                        </p>
+                      </Tooltip>
+                    }
                     showValueLabel
                     maxValue={100}
                     isStriped
@@ -190,15 +200,17 @@ export default function AcademicStatusPanel() {
               </CardBody>
             </Card>
 
-            {Object.keys(academicStatusByYear).map((year) => {
-              return (
-                <AcademicStatusYearEntry
-                  key={year}
-                  year={parseInt(year)}
-                  courses={academicStatusByYear[year]}
-                />
-              );
-            })}
+            <div className="md:grid md:grid-cols-2 md:gap-4">
+              {Object.keys(academicStatusByYear).map((year) => {
+                return (
+                  <AcademicStatusYearEntry
+                    key={year}
+                    year={parseInt(year)}
+                    courses={academicStatusByYear[year]}
+                  />
+                );
+              })}
+            </div>
           </>
         )}
       </Card>
