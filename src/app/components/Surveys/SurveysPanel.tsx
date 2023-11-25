@@ -81,11 +81,11 @@ export default function SurveysPanel() {
 
     if (completedPolls?.length < 1 && Object.keys(polls)?.length < 1)
       fetchPolls();
-  }, [polls, completedPolls]);
+  });
 
   return (
     <div className="flex flex-col items-center justify-center mx-4 gap-4">
-      <h1 className="my-4 text-xl font-bold">Encuestas Docentes</h1>
+      <h1 className="my-4 text-xl md:text-3xl font-bold">Encuestas Docentes</h1>
 
       <Modal
         isOpen={isOpen}
@@ -102,7 +102,7 @@ export default function SurveysPanel() {
                 Encuestas Realizadas
               </ModalHeader>
               <ModalBody>
-                <div className="flex flex-col gap-4">
+                <div className="flex flex-col md:grid md:grid-cols-2 gap-4">
                   {completedPolls?.length > 0 ? (
                     completedPolls?.map((poll, i) => {
                       return (
@@ -135,7 +135,7 @@ export default function SurveysPanel() {
         </ModalContent>
       </Modal>
 
-      <Card className="w-full">
+      <Card className="max-sm:w-full">
         <CardHeader>
           <Button
             className="w-full text-foreground"
@@ -169,7 +169,7 @@ export default function SurveysPanel() {
           );
         })
       ) : loading ? (
-        <Card className="w-full">
+        <Card className="max-sm:w-full">
           <CardBody>
             <div className="flex gap-x-2 items-center">
               <Spinner color="primary" />
@@ -180,7 +180,7 @@ export default function SurveysPanel() {
           </CardBody>
         </Card>
       ) : (
-        <Card className="w-full">
+        <Card className="max-sm:w-full">
           <CardBody>
             <h2 className="text-center font-semibold text-foreground-300">
               No hay encuestas disponibles.

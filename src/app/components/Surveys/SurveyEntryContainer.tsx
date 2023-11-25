@@ -10,11 +10,11 @@ export default function SurveyEntryContainer({
   children: React.ReactNode;
 }) {
   return (
-    <Card className="w-full p-4">
+    <Card className="w-full md:w-[65%] p-4">
       <h2 className="my-4 text-base font-semibold text-center">
         {name}
       </h2>
-      <div className="flex flex-col items-center justify-center gap-4">
+      <div className="items-center justify-center flex flex-col md:grid md:grid-flow-col md:auto-cols-max gap-4">
         {children}
       </div>
     </Card>

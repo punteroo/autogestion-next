@@ -2,7 +2,6 @@
 
 import { usePollAnswerFlow } from "@/app/context/PollAnswerContext";
 import { Button, Card, CardBody, CardHeader, Spinner } from "@nextui-org/react";
-import { PollEntry, PollQuestions } from "autogestion-frvm/types";
 import SurveyQuestionRadius from "./SurveyQuestionRadius";
 import { motion } from "framer-motion";
 import BackArrowIcon from "../../Icons/BackArrowIcon";
@@ -116,7 +115,7 @@ export default function MainSurveyFlow() {
   }
 
   return (
-    <div className="w-full px-4">
+    <div className="w-full md:w-max md:m-auto px-4">
       <ToastContainer
         position="bottom-center"
         autoClose={3500}
@@ -131,7 +130,7 @@ export default function MainSurveyFlow() {
         theme="dark"
       />
       {questions?.length && academicInfo ? (
-        <div className="w-full flex flex-col gap-2">
+        <div className="w-full md:w-max flex flex-col gap-2">
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -139,7 +138,7 @@ export default function MainSurveyFlow() {
           >
             <Card>
               <CardBody>
-                <div className="grid grid-cols-3 gap-2 w-full">
+                <div className="grid max-sm:grid-cols-3 md:flex md:justify-between gap-2">
                   <div className="flex flex-col gap-1 items-start justify-center col-span-2">
                     <h4 className="text-small font-semibold leading-none text-default-600">
                       {academicInfo.persona.apellido?.toUpperCase()},{" "}
@@ -183,8 +182,8 @@ export default function MainSurveyFlow() {
                 <CardHeader>
                   <div className="w-full">
                     {currentQuestion > 0 ? (
-                      <div className="w-min h-min text-slate-500 float-left absolute">
-                        <span onClick={(e) => previousQuestion()}>
+                      <div className="w-min h-min float-left absolute">
+                        <span className="cursor-pointer text-slate-500 md:hover:text-slate-300" onClick={(e) => previousQuestion()}>
                           <BackArrowIcon />
                         </span>
                       </div>
