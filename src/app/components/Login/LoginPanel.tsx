@@ -2,49 +2,14 @@
 
 import { getSections } from "@/app/api/autogestion/client.wrapper";
 import { DashboardContext } from "@/app/context/DashboardContext";
-import { Modal, ModalContent, ModalBody } from "@nextui-org/react";
 import { ClientSection } from "autogestion-frvm/client";
 import { signIn } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useContext, useEffect, useRef, useState } from "react";
+import { useContext, useRef, useState } from "react";
 
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/ReactToastify.min.css";
-
-function useWindowSize() {
-  // Initialize state with undefined width/height so server and client renders match
-  // Learn more here: https://joshwcomeau.com/react/the-perils-of-rehydration/
-  const [windowSize, setWindowSize] = useState<{
-    width?: number;
-    height?: number;
-  }>({
-    width: undefined,
-    height: undefined,
-  });
-
-  useEffect(() => {
-    // only execute all the code below in client side
-    // Handler to call on window resize
-    function handleResize() {
-      // Set window width/height to state
-      setWindowSize({
-        width: window.innerWidth,
-        height: window.innerHeight,
-      });
-    }
-
-    // Add event listener
-    window.addEventListener("resize", handleResize);
-
-    // Call handler right away so state gets updated with initial window size
-    handleResize();
-
-    // Remove event listener on cleanup
-    return () => window.removeEventListener("resize", handleResize);
-  }, []); // Empty array ensures that effect is only run on mount
-  return windowSize;
-}
 
 export default function LoginPanel({ providerName }: { providerName: string }) {
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -55,15 +20,6 @@ export default function LoginPanel({ providerName }: { providerName: string }) {
 
   const academicId = useRef<string>();
   const password = useRef<string>();
-
-  const [isMobile, setIsMobile] = useState<boolean>(false);
-
-  // Disallow non-mobile devices.
-  const size = useWindowSize();
-  useEffect(
-    () => setIsMobile(true) /* setIsMobile(size.width! < 640) */,
-    [size]
-  );
 
   async function submitLogin() {
     setIsLoading(true);
@@ -130,33 +86,6 @@ export default function LoginPanel({ providerName }: { providerName: string }) {
         theme="dark"
       />
 
-      {isMobile ? null : (
-        <Modal
-          isOpen={true}
-          isDismissable={false}
-          hideCloseButton
-          isKeyboardDismissDisabled
-          size="full"
-        >
-          <ModalContent className="h-full">
-            <ModalBody className="text-center my-auto">
-              <div className="flex flex-col my-auto gap-12">
-                <h1 className="text-3xl font-bold">
-                  Dispositivo No Compatible
-                </h1>
-                <p>
-                  Esta aplicación no es compatible con dispositivos de
-                  escritorio.
-                </p>
-                <p>
-                  Por favor, ingrese a la aplicación desde un dispositivo móvil.
-                </p>
-              </div>
-            </ModalBody>
-          </ModalContent>
-        </Modal>
-      )}
-
       <div className="bg-slate-100 rounded-xl flex-col relative w-full md:w-[35%] p-8 m-auto text-black">
         <div className="text-center p-4">
           <h1 className="font-bold">Autogestión</h1>
@@ -208,17 +137,6 @@ export default function LoginPanel({ providerName }: { providerName: string }) {
           <p>
             No se persisten datos de los usuarios más que redireccionarlos hacia
             el Web Service de Autogestión.
-          </p>
-          <br />
-          <p>
-            El proyecto hace uso de un wrapper no oficial de la API de
-            autogestión escrito por mí en Typescript.
-          </p>
-          <br />
-          <p>
-            Por petición de la UTN FRVM, tengo prohibido distribuir tanto el
-            código de este front como el wrapper de la API de Autogestión (ambos
-            en Typescript).
           </p>
         </div>
         <div className="bg-slate-300 h-0.5 w-full my-4"></div>

@@ -4,6 +4,7 @@ import { Card, CardHeader, Divider, CardBody, Button } from "@nextui-org/react";
 import { UserSession } from "../../api/auth/[...nextauth]/route";
 import { LockIcon } from "../Icons/LockIcon";
 import ProfileCard from "./ProfileCard";
+import { StarIcon } from "../Icons/StarIcon";
 
 export default function ProfilePanel({ user }: { user: UserSession }) {
   return (
@@ -55,10 +56,19 @@ export default function ProfilePanel({ user }: { user: UserSession }) {
           </CardHeader>
           <Divider />
           <CardBody>
-            <div className="grid auto-col-auto gap-x-2 gap-y-2 grid-flow-col">
-              <div className="mx-auto">
+            <div className="mx-auto">
+              <div className="flex max-xl:flex-col gap-4">
                 <Button color="danger" size="md" startContent={<LockIcon />}>
                   Cambiar Contraseña
+                </Button>
+                <Button color="primary" size="md" startContent={<StarIcon />}>
+                  Coming Soon
+                </Button>
+                <Button color="primary" size="md" startContent={<StarIcon />}>
+                  Coming Soon
+                </Button>
+                <Button color="primary" size="md" startContent={<StarIcon />}>
+                  Coming Soon
                 </Button>
               </div>
             </div>
