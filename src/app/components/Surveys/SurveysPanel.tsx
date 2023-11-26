@@ -102,9 +102,9 @@ export default function SurveysPanel() {
                 Encuestas Realizadas
               </ModalHeader>
               <ModalBody>
-                <div className="flex flex-col md:grid md:grid-cols-2 gap-4">
-                  {completedPolls?.length > 0 ? (
-                    completedPolls?.map((poll, i) => {
+                {completedPolls?.length > 0 ? (
+                  <div className="flex flex-col md:grid md:grid-cols-2 gap-4">
+                    {completedPolls?.map((poll, i) => {
                       return (
                         <SurveyEntry
                           key={i}
@@ -120,15 +120,15 @@ export default function SurveysPanel() {
                           isDone={true}
                         />
                       );
-                    })
-                  ) : (
-                    <div className="p-4">
-                      <h2 className="text-center font-semibold text-foreground-300">
-                        No contestaste ninguna encuesta todavía.
-                      </h2>
-                    </div>
-                  )}
-                </div>
+                    })}
+                  </div>
+                ) : (
+                  <div className="my-4">
+                    <h2 className="text-center font-semibold text-foreground-300">
+                      No contestaste ninguna encuesta todavía.
+                    </h2>
+                  </div>
+                )}
               </ModalBody>
             </>
           )}
