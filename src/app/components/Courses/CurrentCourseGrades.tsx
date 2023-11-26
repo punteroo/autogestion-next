@@ -30,6 +30,15 @@ export default function CurrentCourseGrades({
 }) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
+  function parseGradeState(grade: string): string {
+    switch (grade) {
+      case "NO_APROBADO":
+        return "DESAPROBADO";
+      default:
+        return grade;
+    }
+  }
+
   return (
     <>
       <Modal isOpen={isOpen} onOpenChange={onOpenChange} backdrop="blur">
@@ -43,7 +52,9 @@ export default function CurrentCourseGrades({
                   bottomContent={
                     <Card>
                       <CardHeader>
-                        <h4 className="text-md font-semibold mx-auto">Resumen</h4>
+                        <h4 className="text-md font-semibold mx-auto">
+                          Resumen
+                        </h4>
                       </CardHeader>
                       <Divider />
                       <CardBody>
@@ -88,7 +99,7 @@ export default function CurrentCourseGrades({
                                   : "bg-red-200 text-red-600"
                               }`}
                             >
-                              {grade.estado}
+                              {parseGradeState(grade.estado)}
                             </Chip>
                           </TableCell>
                         </TableRow>
