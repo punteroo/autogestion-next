@@ -150,7 +150,7 @@ export default function AcademicStatusYearEntryDetails({
         </ModalContent>
       </Modal>
 
-      <Link onClick={onOpen}>Ver</Link>
+      <Link className="cursor-pointer" onClick={onOpen}>Ver</Link>
     </>
   );
 }

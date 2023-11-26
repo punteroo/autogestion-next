@@ -46,40 +46,59 @@ export default function TakenExamsPanel() {
     if (exams?.length < 1) fetchExams();
   }, [exams]);
 
+  function calculateStatusColorFromGrade(grade: number): string {
+    switch (grade) {
+      case 10:
+        return "bg-green-300 text-green-700";
+      case 9:
+        return "bg-green-200 text-green-600";
+      case 8:
+        return "bg-green-200 text-green-600";
+      case 7:
+        return "bg-green-100 text-green-500";
+      case 6:
+        return "bg-green-100 text-green-500";
+      case 5:
+        return "bg-yellow-200 text-yellow-600";
+      case 4:
+        return "bg-yellow-200 text-yellow-600";
+      case 3:
+        return "bg-yellow-200 text-yellow-600";
+      case 2:
+        return "bg-red-200 text-red-600";
+      case 1:
+        return "bg-red-200 text-red-600";
+      case 0:
+        return "bg-red-200 text-red-600";
+      default:
+        return "bg-gray-200 text-gray-600";
+    }
+  }
+
   function mapNumberNameToNumber(numberName: string): number | string {
     switch (numberName) {
       case "UNO":
-      case "uno":
         return 1;
       case "DOS":
-      case "dos":
         return 2;
       case "TRES":
-      case "tres":
         return 3;
       case "CUATRO":
-      case "cuatro":
         return 4;
       case "CINCO":
-      case "cinco":
         return 5;
       case "SEIS":
-      case "seis":
         return 6;
       case "SIETE":
-      case "siete":
         return 7;
       case "OCHO":
-      case "ocho":
         return 8;
       case "NUEVE":
-      case "nueve":
         return 9;
       case "DIEZ":
-      case "diez":
         return 10;
-      case "Ausen.":
-        return "-";
+      case "AUSEN.":
+        return -1;
       default:
         return numberName;
     }
@@ -98,9 +117,11 @@ export default function TakenExamsPanel() {
 
   return (
     <div className="flex flex-col items-center justify-center mx-4 gap-4">
-      <h1 className="my-4 text-xl font-bold">Mis Exámenes Rendidos</h1>
+      <h1 className="my-4 text-xl md:text-3xl font-bold">
+        Mis Exámenes Rendidos
+      </h1>
 
-      <Table isHeaderSticky aria-label="Examenes">
+      <Table isHeaderSticky aria-label="Examenes" className="md:w-[75%]">
         <TableHeader>
           <TableColumn>Materia</TableColumn>
           <TableColumn>Fecha</TableColumn>
@@ -125,8 +146,15 @@ export default function TakenExamsPanel() {
                   <TableCell>
                     {new Date(exam.fecha).toLocaleDateString()}
                   </TableCell>
-                  <TableCell className="flex flex-col justify-center items-center my-auto">
-                    {mapNumberNameToNumber(exam.nota)}
+                  <TableCell className="flex max-sm:flex-col md:gap-unit-md justify-center md:justify-start gap-y-2 items-center my-auto">
+                    <Chip
+                      size="sm"
+                      className={calculateStatusColorFromGrade(
+                        mapNumberNameToNumber(exam.nota.toUpperCase()) as number
+                      )}
+                    >
+                      {mapNumberNameToNumber(exam.nota.toUpperCase()) ?? "-"}
+                    </Chip>
                     <Chip
                       size="sm"
                       className={`text-xs px-1.5 ${

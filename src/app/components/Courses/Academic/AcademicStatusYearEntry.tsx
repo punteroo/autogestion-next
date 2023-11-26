@@ -43,8 +43,8 @@ export default function AcademicStatusYearEntry({
   }
 
   function processCourseStatus(
-    status: AcademicEntry['status'],
-    grade?: number,
+    status: AcademicEntry["status"],
+    grade?: number
   ): React.ReactNode {
     // Classify course status depending on what the course has set.
     switch (status) {
@@ -92,7 +92,7 @@ export default function AcademicStatusYearEntry({
       case "NO_CURSADA":
         return (
           <Chip size="sm" className="text-xs px-1.5 bg-gray-200 text-gray-600">
-            Incompleta
+            Pendiente
           </Chip>
         );
       default:
@@ -124,15 +124,12 @@ export default function AcademicStatusYearEntry({
                 <TableCell>
                   {course.name} ({course.plan})
                 </TableCell>
-                <TableCell className="w-full break-keep">
-                  {processCourseStatus(
-                    course.status,
-                    course.grade
-                  )}
+                <TableCell className="break-keep">
+                  {processCourseStatus(course.status, course.grade)}
                 </TableCell>
-                <TableCell>
+                <TableCell className="text-center">
                   {course.status === "CURSANDO" ? (
-                    <p className="text-center text-foreground-400">N/A</p>
+                    <p className="text-foreground-400 cursor-not-allowed">N/A</p>
                   ) : (
                     <AcademicStatusYearEntryDetails course={course} />
                   )}

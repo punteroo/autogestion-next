@@ -122,6 +122,7 @@ export default function HistoricCourses() {
         isDismissable={false}
         placement="center"
         backdrop="blur"
+        size="2xl"
       >
         <ModalContent>
           {(onClose) => (

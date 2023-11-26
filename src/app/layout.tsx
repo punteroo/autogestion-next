@@ -9,8 +9,8 @@ import { DashboardContextProvider } from "./context/DashboardContext";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Autogestión FRVM",
-  description: "Autogestión de alumnos de la UTN FRVM (no oficial)",
+  title: "NEXUS - Autogestión",
+  description: "Autogestión de la UTN Facultad Regional Villa María (Unofficial)",
 };
 
 export default async function RootLayout({

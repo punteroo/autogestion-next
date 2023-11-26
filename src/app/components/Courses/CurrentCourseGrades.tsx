@@ -32,7 +32,7 @@ export default function CurrentCourseGrades({
 
   return (
     <>
-      <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
+      <Modal isOpen={isOpen} onOpenChange={onOpenChange} backdrop="blur">
         <ModalContent>
           {(onClose) => (
             <>
@@ -102,7 +102,7 @@ export default function CurrentCourseGrades({
         </ModalContent>
       </Modal>
 
-      <Link onClick={onOpen}>
+      <Link onClick={onOpen} className="cursor-pointer">
         Ver
       </Link>
     </>
