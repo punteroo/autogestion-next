@@ -1,4 +1,4 @@
-export function NexusLogo() {
+export const NexusLogo = () => {
   return (
     <svg
       id="logo-35"
@@ -21,4 +21,4 @@ export function NexusLogo() {
       ></path>{" "}
     </svg>
   );
-}
+};

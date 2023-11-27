@@ -1,4 +1,4 @@
-export default function BackArrowIcon() {
+export const BackArrowIcon = () => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -15,4 +15,4 @@ export default function BackArrowIcon() {
       />
     </svg>
   );
-}
+};

@@ -1,4 +1,4 @@
-export function StarIcon() {
+export const StarIcon = () => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
