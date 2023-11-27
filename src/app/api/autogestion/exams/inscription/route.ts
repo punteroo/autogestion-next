@@ -100,9 +100,9 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     );
 
     return NextResponse.json(enrollment);
-  } catch (e) {
+  } catch (e: any) {
     console.error(e);
-    throw e;
+    return NextResponse.json({ message: e?.message }, { status: 500 });
   }
 }
 
