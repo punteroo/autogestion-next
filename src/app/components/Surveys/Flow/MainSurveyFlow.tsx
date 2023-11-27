@@ -4,9 +4,9 @@ import { usePollAnswerFlow } from "@/app/context/PollAnswerContext";
 import { Button, Card, CardBody, CardHeader, Spinner } from "@nextui-org/react";
 import SurveyQuestionRadius from "./SurveyQuestionRadius";
 import { motion } from "framer-motion";
-import BackArrowIcon from "../../Icons/BackArrowIcon";
+import { BackArrowIcon } from "../../Icons/BackArrowIcon";
 import SurveyQuestionText from "./SurveyQuestionText";
-import RestartIcon from "../../Icons/RestartIcon";
+import { RestartIcon } from "../../Icons/RestartIcon";
 import { CheckIcon } from "../../Icons/CheckIcon";
 import { useState } from "react";
 import { AutogestionResponse } from "@/types/api/autogestion.http.wrapper";
@@ -183,7 +183,10 @@ export default function MainSurveyFlow() {
                   <div className="w-full">
                     {currentQuestion > 0 ? (
                       <div className="w-min h-min float-left absolute">
-                        <span className="cursor-pointer text-slate-500 md:hover:text-slate-300" onClick={(e) => previousQuestion()}>
+                        <span
+                          className="cursor-pointer text-slate-500 md:hover:text-slate-300"
+                          onClick={(e) => previousQuestion()}
+                        >
                           <BackArrowIcon />
                         </span>
                       </div>
