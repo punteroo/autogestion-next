@@ -14,7 +14,7 @@
     "@types/react": "18.2.20",
     "@types/react-dom": "18.2.7",
     "@vercel/analytics": "^1.1.1",
-    "autogestion-frvm": "git+https://punteroo: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@github.com/punteroo/autogestion-frvm.git",
+    "autogestion-frvm": "https://punteroo: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@github.com/punteroo/autogestion-frvm.git",
     "autoprefixer": "10.4.15",
     "axios": "^1.4.0",
     "eslint": "8.47.0",
