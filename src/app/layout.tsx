@@ -5,12 +5,14 @@ import { auth } from "./api/auth/[...nextauth]/route";
 import NextAuth from "./components/SessionProvider";
 import { NextUI } from "./providers";
 import { DashboardContextProvider } from "./context/DashboardContext";
+import { Analytics } from "@vercel/analytics/react";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "NEXUS - Autogestión",
-  description: "Autogestión de la UTN Facultad Regional Villa María (Unofficial)",
+  description:
+    "Autogestión de la UTN Facultad Regional Villa María (Unofficial)",
 };
 
 export default async function RootLayout({
@@ -31,7 +33,10 @@ export default async function RootLayout({
       <body className={`${inter.className} dark bg-background min-h-screen`}>
         <NextAuth session={session}>
           <NextUI>
-            <DashboardContextProvider>{children}</DashboardContextProvider>
+            <DashboardContextProvider>
+              {children}
+              <Analytics />
+            </DashboardContextProvider>
           </NextUI>
         </NextAuth>
         <script
