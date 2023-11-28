@@ -30,7 +30,7 @@ export default async function RootLayout({
           content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
         />
       </head>
-      <body className={`${inter.className} dark bg-background min-h-screen`}>
+      <body className={`${inter.className} dark bg-background min-h-screen text-foreground`}>
         <NextAuth session={session}>
           <NextUI>
             <DashboardContextProvider>
