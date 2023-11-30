@@ -41,9 +41,19 @@ export default function AcademicStatusPanel() {
       isLoading(true);
 
       try {
+        if (!session?.user) return;
+
+        // Build a base64 encoded token.
+        const { id, hash } = session.user;
+
+        const token = Buffer.from(`${id}:${hash}`).toString("base64");
+
         const { data } = await axios<AcademicEntry[]>({
           method: "GET",
-          url: "/api/autogestion/courses/academic",
+          url: process.env.NEXT_PUBLIC_ACADEMIC_API,
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         });
 
         setAcademicStatus(data);

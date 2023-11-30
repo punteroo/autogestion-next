@@ -8,6 +8,7 @@ import FailedLoad from "../../FailedLoad";
 import EnrolledExamsAccordion from "./Legacy/EnrolledExamsAccordion";
 import { motion } from "framer-motion";
 import AvailableExamCard from "./AvailableExamCard";
+import { useSession } from "next-auth/react";
 
 function AvailableExamEntrySkeleton({
   amount,
@@ -30,6 +31,8 @@ function AvailableExamEntrySkeleton({
 }
 
 export default function ExamInscriptionPanel() {
+  const { data: session } = useSession();
+
   const [loading, isLoading] = useState<boolean>(true);
 
   const [failed, hasFailed] = useState<boolean>(false);
@@ -43,9 +46,19 @@ export default function ExamInscriptionPanel() {
       hasFailed(false);
 
       try {
+        if (!session?.user) return;
+
+        // Build a base64 encoded token.
+        const { id, hash } = session.user;
+
+        const token = Buffer.from(`${id}:${hash}`).toString("base64");
+
         const { data } = await axios<AvailableExam[]>({
           method: "GET",
-          url: "/api/autogestion/exams/inscription",
+          url: process.env.NEXT_PUBLIC_EXAMS_API,
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         });
 
         setAvailableExams(data);
