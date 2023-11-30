@@ -173,7 +173,7 @@ export default function ExamInscriptionPanel() {
           </p>
         )
       ) : (
-        <AvailableExamEntrySkeleton amount={6} />
+        null
       )}
     </div>
   );
