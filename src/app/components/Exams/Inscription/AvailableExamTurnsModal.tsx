@@ -63,6 +63,9 @@ export default function AvailableExamTurnModal({
   /** State that holds the selected turn to enroll into. */
   const [selectedTurn, setSelectedTurn] = useState<ExamTurn | null>(null);
 
+  /** State that controls an error message when searching turns. */
+  const [turnsErrorMessage, setTurnsErrorMessage] = useState<string>("");
+
   const {
     isOpen: isConfirmationOpen,
     onOpen: onConfirmationOpen,
@@ -112,9 +115,16 @@ export default function AvailableExamTurnModal({
         });
 
         setAvailableTurns(data);
-      } catch (e) {
+      } catch (e: any) {
         console.error(
-          `Failed to search for turns for ${JSON.stringify(exam)}: ${e}`
+          `Failed to search for turns for ${JSON.stringify(exam)}: ${
+            e?.response?.data ? JSON.stringify(e.response.data) : e
+          }`
+        );
+
+        setTurnsErrorMessage(
+          e?.response?.data?.message ??
+            "No hay turnos disponibles para esta materia."
         );
       }
 
@@ -295,7 +305,10 @@ export default function AvailableExamTurnModal({
                     </RadioGroup>
                   ) : (
                     <div className="text-center text-foreground-400 text-sm">
-                      <p>No hay turnos disponibles para esta materia.</p>
+                      <p>
+                        {turnsErrorMessage ??
+                          "No hay turnos disponibles para esta materia."}
+                      </p>
                       <p>
                         Si crees que esto es un error, contáctate con{" "}
                         <span className="font-semibold">
