@@ -27,7 +27,7 @@ export const authOptions: NextAuthConfig = {
     },
     async session({ session, token }) {
       // Assign the user to the session.
-      if (token?.user) session.user = token.user as any;
+      if (token) session.user = token as any;
 
       return session;
     },
