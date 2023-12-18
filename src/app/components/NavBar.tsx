@@ -139,7 +139,7 @@ export default function NavBar() {
 
   return (
     <>
-      <Navbar onMenuOpenChange={setIsMenuOpen} shouldHideOnScroll>
+      <Navbar onMenuOpenChange={setIsMenuOpen} shouldHideOnScroll maxWidth="xl" height="5.5rem">
         <NavbarContent>
           <NavbarMenuToggle
             aria-label={isMenuOpen ? "Close menu" : "Open menu"}
@@ -163,7 +163,7 @@ export default function NavBar() {
           }}
         >
           <NavbarContent
-            className="hidden sm:flex gap-4 w-full"
+            className="hidden sm:flex gap-4 lg:gap-12 w-full"
             justify="center"
           >
             {filteredSections.map((item, index) => (
@@ -179,15 +179,17 @@ export default function NavBar() {
                     </span>
                   ) : (
                     <Link href={item.href} passHref>
-                      <span
-                        className={`text-sm font-semibold ${
-                          pathName === item.href
-                            ? "text-blue-600"
-                            : "text-foreground"
-                        }`}
-                      >
-                        {item?.shortName ?? item.name}
-                      </span>
+                      <div className="lg:w-max md:h-max">
+                        <span
+                          className={`text-sm font-semibold ${
+                            pathName === item.href
+                              ? "text-blue-600"
+                              : "text-foreground"
+                          }`}
+                        >
+                          {item?.shortName ?? item.name}
+                        </span>
+                      </div>
                     </Link>
                   )
                 }
@@ -196,8 +198,11 @@ export default function NavBar() {
           </NavbarContent>
         </motion.div>
         <NavbarContent justify="end">
-          <NavbarItem>
+          <NavbarItem className="flex flex-col gap-1 items-center">
             <NavBarLogOut />
+            <p className="text-center text-sm font-bold text-foreground-400">
+              {user?.firstName} {user?.lastName}
+            </p>
           </NavbarItem>
         </NavbarContent>
         <NavbarMenu>

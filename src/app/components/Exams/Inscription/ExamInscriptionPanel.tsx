@@ -121,7 +121,7 @@ export default function ExamInscriptionPanel() {
                 </>
               ) : failed ? (
                 <FailedLoad
-                  message="No se pudo obtener la lista de exámenes disponibles. Puedes reintentar la carga si crees que es un error."
+                  message="No se pudo obtener la lista de exámenes disponibles. Puedes reintentar la carga si crees que es un error, o simplemente recarga la página."
                   stateChanges={{ isLoading, hasFailed }}
                 />
               ) : (
@@ -172,9 +172,7 @@ export default function ExamInscriptionPanel() {
             No hay exámenes disponibles para inscribirte.
           </p>
         )
-      ) : (
-        null
-      )}
+      ) : null}
     </div>
   );
 }

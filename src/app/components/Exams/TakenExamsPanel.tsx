@@ -43,8 +43,8 @@ export default function TakenExamsPanel() {
       }
     }
 
-    if (exams?.length < 1) fetchExams();
-  }, [exams]);
+    fetchExams();
+  }, []);
 
   function calculateStatusColorFromGrade(grade: number): string {
     switch (grade) {
@@ -70,12 +70,15 @@ export default function TakenExamsPanel() {
         return "bg-red-200 text-red-600";
       case 0:
         return "bg-red-200 text-red-600";
+      case -1:
+      case -2:
+        return "bg-gray-200 text-gray-600";
       default:
         return "bg-gray-200 text-gray-600";
     }
   }
 
-  function mapNumberNameToNumber(numberName: string): number | string {
+  function mapNumberNameToNumber(numberName: string): number {
     switch (numberName) {
       case "UNO":
         return 1;
@@ -99,17 +102,21 @@ export default function TakenExamsPanel() {
         return 10;
       case "AUSEN.":
         return -1;
+      case "INSC.":
+        return -2;
       default:
-        return numberName;
+        return 0;
     }
   }
 
   function parseStatusName(
     status: ExamEntry["estadoAprobacion"]
-  ): "APROBADO" | "DESAPROBADO" | "AUSENTE" {
+  ): "APROBADO" | "DESAPROBADO" | "AUSENTE" | "INSCRIPTO" {
     switch (status) {
       case "NO_APROBADO":
         return "DESAPROBADO";
+      case null:
+        return "INSCRIPTO";
       default:
         return status;
     }
@@ -128,17 +135,25 @@ export default function TakenExamsPanel() {
           <TableColumn>Nota</TableColumn>
         </TableHeader>
         <TableBody>
-          {loading
-            ? [...Array(12)].map((_, i) => (
-                <TableRow key={i} aria-label={i.toString()}>
-                  {[...Array(3)].map((_, i) => (
-                    <TableCell key={i}>
-                      <Skeleton className="w-full rounded-lg h-4" />
-                    </TableCell>
-                  ))}
-                </TableRow>
-              ))
-            : exams.map((exam, i) => (
+          {loading ? (
+            [...Array(12)].map((_, i) => (
+              <TableRow key={i} aria-label={i.toString()}>
+                {[...Array(3)].map((_, i) => (
+                  <TableCell key={i}>
+                    <Skeleton className="w-full rounded-lg h-4" />
+                  </TableCell>
+                ))}
+              </TableRow>
+            ))
+          ) : exams?.length ? (
+            exams.map((exam, i) => {
+              // Obtain the exam grade.
+              const grade = mapNumberNameToNumber(exam.nota.toUpperCase());
+
+              // Also determine the status based on the grade info.
+              const status = parseStatusName(exam.estadoAprobacion);
+
+              return (
                 <TableRow key={i} aria-label={i.toString()}>
                   <TableCell>
                     {exam.nombreMateria} ({exam.plan})
@@ -147,29 +162,47 @@ export default function TakenExamsPanel() {
                     {new Date(exam.fecha).toLocaleDateString()}
                   </TableCell>
                   <TableCell className="flex max-sm:flex-col md:gap-unit-md justify-center md:justify-start gap-y-2 items-center my-auto">
-                    <Chip
-                      size="sm"
-                      className={calculateStatusColorFromGrade(
-                        mapNumberNameToNumber(exam.nota.toUpperCase()) as number
-                      )}
-                    >
-                      {mapNumberNameToNumber(exam.nota.toUpperCase()) ?? "-"}
-                    </Chip>
+                    {grade < 0 ? null : (
+                      <Chip
+                        size="sm"
+                        className={calculateStatusColorFromGrade(grade)}
+                      >
+                        {grade ?? "-"}
+                      </Chip>
+                    )}
                     <Chip
                       size="sm"
                       className={`text-xs px-1.5 ${
-                        exam.estadoAprobacion === "APROBADO"
+                        status === "APROBADO"
                           ? "bg-green-200 text-green-600"
-                          : exam.estadoAprobacion === "AUSENTE"
+                          : status === "AUSENTE"
                           ? "bg-gray-200 text-gray-600"
+                          : status === "INSCRIPTO"
+                          ? "bg-orange-200 text-orange-600"
                           : "bg-red-200 text-red-600"
                       }`}
                     >
-                      {parseStatusName(exam.estadoAprobacion)}
+                      {status}
                     </Chip>
                   </TableCell>
                 </TableRow>
+              );
+            })
+          ) : (
+            <TableRow>
+              <TableCell
+                colSpan={3}
+                className="text-center text-foreground-500"
+              >
+                No has rendido ningún exámen aún.
+              </TableCell>
+              {([...Array(5)] as any).map((_: any, i: number) => (
+                <TableCell key={i} hidden={true}>
+                  haha
+                </TableCell>
               ))}
+            </TableRow>
+          )}
         </TableBody>
       </Table>
     </div>

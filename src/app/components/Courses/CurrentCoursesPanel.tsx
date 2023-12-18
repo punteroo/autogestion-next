@@ -50,8 +50,8 @@ export default function TakenCoursesPanel() {
       }
     }
 
-    if (courses?.length < 1) fetchCourses();
-  }, [courses]);
+    fetchCourses();
+  }, []);
 
   /**
    * Parses the provided level into a readable string.
@@ -104,79 +104,94 @@ export default function TakenCoursesPanel() {
             <TableColumn>Notas</TableColumn>
           </TableHeader>
           <TableBody>
-            {loading
-              ? [...Array(7)].map((_, i) => (
-                  <TableRow key={i} aria-label={i.toString()}>
-                    <TableCell colSpan={6}>
-                      <Skeleton className="w-full rounded-lg h-4" />
+            {loading ? (
+              [...Array(7)].map((_, i) => (
+                <TableRow key={i} aria-label={i.toString()}>
+                  <TableCell colSpan={6}>
+                    <Skeleton className="w-full rounded-lg h-4" />
+                  </TableCell>
+                  {([...Array(5)] as any).map((_: any, i: number) => (
+                    <TableCell key={i} hidden={true}>
+                      haha
                     </TableCell>
-                    {([...Array(5)] as any).map((_: any, i: number) => (
-                      <TableCell key={i} hidden={true}>
-                        haha
-                      </TableCell>
-                    ))}
+                  ))}
+                </TableRow>
+              ))
+            ) : courses?.length ? (
+              courses.map((course) => {
+                return (
+                  <TableRow
+                    key={course.codigoMateria}
+                    aria-label={course.codigoMateria}
+                  >
+                    <TableCell>
+                      {course.nombreMateria} ({course.plan})
+                    </TableCell>
+                    <TableCell className="hidden md:table-cell">
+                      {parseCourseLevel(course.nivel)}
+                    </TableCell>
+                    <TableCell className="hidden md:table-cell">
+                      {course.plan}
+                    </TableCell>
+                    <TableCell>{course.anioCursado}</TableCell>
+                    <TableCell>
+                      <Popover placement="top">
+                        <PopoverTrigger>
+                          <Link color="primary" href="#">
+                            {course.totalFaltas}
+                          </Link>
+                        </PopoverTrigger>
+                        <PopoverContent>
+                          {course.faltasInjustificadas?.length ||
+                          course.faltasJustificadas?.length ? (
+                            [
+                              ...course.faltasInjustificadas,
+                              ...course.faltasJustificadas,
+                            ].map((date) => {
+                              return (
+                                <p
+                                  key={date}
+                                  className="text-sm text-foreground-500"
+                                >
+                                  {new Date(date).toLocaleDateString()}
+                                </p>
+                              );
+                            })
+                          ) : (
+                            <p className="text-sm text-foreground-500">
+                              No hay faltas registradas.
+                            </p>
+                          )}
+                        </PopoverContent>
+                      </Popover>
+                    </TableCell>
+                    <TableCell className="text-center">
+                      {course?.notas?.length ? (
+                        <CurrentCourseGrades
+                          name={course.nombreMateria}
+                          grades={course.notas}
+                        />
+                      ) : (
+                        <p className="text-light text-foreground-200">N/A</p>
+                      )}
+                    </TableCell>
                   </TableRow>
-                ))
-              : courses.map((course) => {
-                  return (
-                    <TableRow
-                      key={course.codigoMateria}
-                      aria-label={course.codigoMateria}
-                    >
-                      <TableCell>
-                        {course.nombreMateria} ({course.plan})
-                      </TableCell>
-                      <TableCell className="hidden md:table-cell">
-                        {parseCourseLevel(course.nivel)}
-                      </TableCell>
-                      <TableCell className="hidden md:table-cell">
-                        {course.plan}
-                      </TableCell>
-                      <TableCell>{course.anioCursado}</TableCell>
-                      <TableCell>
-                        <Popover placement="top">
-                          <PopoverTrigger>
-                            <Link color="primary" href="#">
-                              {course.totalFaltas}
-                            </Link>
-                          </PopoverTrigger>
-                          <PopoverContent>
-                            {course.faltasInjustificadas?.length ||
-                            course.faltasJustificadas?.length ? (
-                              [
-                                ...course.faltasInjustificadas,
-                                ...course.faltasJustificadas,
-                              ].map((date) => {
-                                return (
-                                  <p
-                                    key={date}
-                                    className="text-sm text-foreground-500"
-                                  >
-                                    {new Date(date).toLocaleDateString()}
-                                  </p>
-                                );
-                              })
-                            ) : (
-                              <p className="text-sm text-foreground-500">
-                                No hay faltas registradas.
-                              </p>
-                            )}
-                          </PopoverContent>
-                        </Popover>
-                      </TableCell>
-                      <TableCell className="text-center">
-                        {course?.notas?.length ? (
-                          <CurrentCourseGrades
-                            name={course.nombreMateria}
-                            grades={course.notas}
-                          />
-                        ) : (
-                          <p className="text-light text-foreground-200">N/A</p>
-                        )}
-                      </TableCell>
-                    </TableRow>
-                  );
-                })}
+                );
+              })
+            ) : (
+              <TableRow>
+                <TableCell colSpan={6}>
+                  <p className="text-center text-foreground-500">
+                    Actualmente no estás cursando ninguna materia.
+                  </p>
+                </TableCell>
+                {([...Array(5)] as any).map((_: any, i: number) => (
+                  <TableCell key={i} hidden={true}>
+                    haha
+                  </TableCell>
+                ))}
+              </TableRow>
+            )}
           </TableBody>
         </Table>
 
