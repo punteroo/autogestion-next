@@ -77,8 +77,8 @@ export default function AcademicStatusPanel() {
       }
     }
 
-    if (academicStatus?.length < 1 && !failed) fetchAcademicData();
-  }, [academicStatus, failed]);
+    fetchAcademicData();
+  }, []);
 
   function getRandomLoadingMessage(user?: UserSession): string {
     const messages = [
@@ -149,7 +149,7 @@ export default function AcademicStatusPanel() {
           </div>
         ) : failed ? (
           <FailedLoad
-            message="Algo falló al intentar cargar tu estado academico. Puede ser que actualmente el sistema de autogestion de la FRVM no este disponible. Si quieres, puedes intentar cargar de nuevo."
+            message="Algo falló al intentar cargar tu estado academico. Puede ser que actualmente el sistema de autogestion de la FRVM no este disponible. Si quieres, puedes intentar cargar de nuevo o recargar la página."
             stateChanges={{ isLoading, hasFailed }}
           />
         ) : (

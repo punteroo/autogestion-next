@@ -58,7 +58,7 @@ export default function AvailableExamCard({
 
       <Card>
         <CardBody>
-          <div className="flex justify-between items-center">
+          <div className="flex justify-between gap-4 items-center">
             <div className="w-[75%]">
               <div className="flex gap-3 items-center">
                 <div className="float-left text-foreground-200">
