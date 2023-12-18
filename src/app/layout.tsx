@@ -31,14 +31,14 @@ export default async function RootLayout({
         />
       </head>
       <body className={`${inter.className} dark bg-background min-h-screen`}>
-        <DashboardContextProvider>
-          <NextAuth session={session}>
-            <NextUI>
+        <NextAuth session={session}>
+          <NextUI>
+            <DashboardContextProvider>
               {children}
               <Analytics />
-            </NextUI>
-          </NextAuth>
-        </DashboardContextProvider>
+            </DashboardContextProvider>
+          </NextUI>
+        </NextAuth>
         <script
           dangerouslySetInnerHTML={{
             __html: `document.addEventListener('gesturestart', function(e) {
