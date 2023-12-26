@@ -1,6 +1,16 @@
 {
   "name": "autogestion-next",
   "version": "1.0.0",
+  "author": "Lucas 'puntero' Maza <mazalucas@hotmail.com> (https://github.com/punteroo)",
+  "homepage": "https://autogestion.puntero.dev",
+  "bugs": {
+    "url": "https://github.com/punteroo/autogestion-next/issues",
+    "email": "mazalucas@hotmail.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "github:punteroo/autogestion-next"
+  },
   "private": true,
   "scripts": {
     "dev": "next dev",
