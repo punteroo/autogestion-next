@@ -26,16 +26,11 @@ export default function About() {
             UTN FRVM
           </a>
           , con su contraparte en front end + backend. Actualmente este proyecto
-          está en beta, por lo que muchas cosas pueden fallar.{" "}
-          <span className="text-red-300">
-            Debido a las restricciones impuestas por la universidad
-          </span>
-          , tengo prohibido divulgar el source code de esta plataforma y del
-          wrapper. Si estabas interesado en conocer sobre el proyecto, lamento
-          que no puedas indagar más que eso.
+          está en beta, por lo que existe la posibilidad de fallos o cosas que
+          me olvido de validar front-wise.
         </p>
         <p>
-          Si es de tu interés, la plataforma está hecha en{" "}
+          La plataforma está hecha en{" "}
           <a
             href="https://nextjs.org"
             target="_blank"
@@ -49,8 +44,7 @@ export default function About() {
           </span>{" "}
           que wrappea la API de Autogestión de la UTN FRVM para fácil acceso a
           sus funciones dentro del backend. Ambas partes son desarrolladas por
-          mí, por lo que están privadas por la misma razón que mencioné arriba.
-          Para el estilado y diseño principal, utilizo siempre{" "}
+          mí. Para el estilado y diseño principal, utilizo siempre{" "}
           <a
             href="https://tailwindcss.com"
             target="_blank"
@@ -67,6 +61,19 @@ export default function About() {
             NextUI
           </a>
           , una hermosa librería de componentes 100% compatible con Next 13.
+        </p>
+        <p>
+          Si te interesa saber más, o incluso contribuir al proyecto, puedes
+          hacerlo en mi repositorio de{" "}
+          <a
+            href="https://github.com/punteroo/autogestion-next"
+            target="_blank"
+            className="text-blue-400"
+          >
+            GitHub
+          </a>
+          . No tengas miedo a crear una <b>Issue</b> o <b>Pull Request</b> con
+          cambios que te parezcan necesarios.
         </p>
       </div>
     </div>
