@@ -141,8 +141,8 @@ export default function LoginPanel({ providerName }: { providerName: string }) {
         </div>
         <div className="bg-slate-300 h-0.5 w-full my-4"></div>
         <div className="grid grid-cols-3 gap-y-2 text-xs font-semibold text-center w-full mx-auto">
-          <Link href="https://github.com/punteroo">GitHub</Link>
-          <Link href="https://github.com/punteroo">Soporte</Link>
+          <Link href="https://github.com/punteroo/autogestion-next">GitHub</Link>
+          <Link href="https://github.com/punteroo/autogestion-next/issues">Soporte</Link>
           <Link href="https://frvm.utn.edu.ar">UTN FRVM</Link>
         </div>
       </div>

@@ -28,7 +28,7 @@ export default async function MainDashboard({
           <div className="sm:flex sm:items-center sm:justify-between">
             <div>
               <a
-                href="https://not-autogestion.vercel.app"
+                href="https://autogestion.puntero.dev/"
                 className="flex items-center mb-4 sm:mb-0 space-x-3 rtl:space-x-reverse"
               >
                 <NexusLogo />
@@ -43,19 +43,21 @@ export default async function MainDashboard({
 
             <ul className="flex flex-wrap items-center mb-6 text-sm font-medium sm:mb-0 text-gray-400">
               <li>
-                <Link href="/about">
-                  <span className="hover:underline me-4 md:me-6">
-                    Acerca de
-                  </span>
-                </Link>
-              </li>
-              <li>
                 <a
                   href="https://github.com/punteroo"
                   target="_blank"
                   className="hover:underline me-4 md:me-6"
                 >
-                  GitHub
+                  Mi GitHub
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://github.com/punteroo/autogestion-next"
+                  target="_blank"
+                  className="hover:underline me-4 md:me-6"
+                >
+                  Repositorio
                 </a>
               </li>
               <li>
@@ -76,18 +78,25 @@ export default async function MainDashboard({
                   Institución
                 </a>
               </li>
+              <li>
+                <Link href="/about">
+                  <span className="hover:underline me-4 md:me-6">
+                    Acerca de
+                  </span>
+                </Link>
+              </li>
             </ul>
           </div>
           <hr className="my-6 sm:mx-auto border-gray-700 lg:my-8" />
           <span className="block text-sm sm:text-center text-gray-400">
             © {new Date().getFullYear()}{" "}
             <a
-              href="https://not-autogestion.vercel.app/"
+              href="https://autogestion.puntero.dev/"
               className="hover:underline"
             >
               Nexus
             </a>
-            . No afiliado con UTN FRVM.
+            . No afiliado con UTN FRVM. Esta aplicación <b>no es oficial</b>.
           </span>
         </div>
       </footer>
