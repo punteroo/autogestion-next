@@ -1,14 +1,13 @@
 <p align="center">
-    <a href="https://autogestion.frvm.utn.edu.ar/" target="_blank">
+    <a href="https://autogestion.puntero.dev/" target="_blank">
         <img src="https://i.imgur.com/H8or4vA.png" width="126" style="margin: auto" />
     </a>
 </p>
 <h1 align="center">Nexus - Autogestión Reimagined</h1>
 
-![GitHub deployments](https://img.shields.io/github/deployments/punteroo/autogestion-next/production?label=Vercel&labelColor=0070F3)
-![Website](https://img.shields.io/website?url=https%3A%2F%2Fautogestion.puntero.dev&label=Visitar%20Nexus&labelColor=0070F3)
-![GitHub commit activity (branch)](https://img.shields.io/github/commit-activity/t/punteroo/autogestion-next)
-
+<a href="https://github.com/punteroo/autogestion-next/deployments" target="_blank">![GitHub deployments](https://img.shields.io/github/deployments/punteroo/autogestion-next/production?label=Vercel&labelColor=0070F3)</a>
+<a href="https://autogestion.puntero.dev/" target="_blank">![Website](https://img.shields.io/website?url=https%3A%2F%2Fautogestion.puntero.dev&label=Visitar%20Nexus&labelColor=0070F3)</a>
+<a href="https://github.com/punteroo/autogestion-next/commits/master/" target="_blank">![GitHub commit activity (branch)](https://img.shields.io/github/commit-activity/t/punteroo/autogestion-next)</a>
 
 Este repositorio refleja la aplicación web de **Nexus**, el autogestión no oficial de la UTN FRVM.
 
