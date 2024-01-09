@@ -1,3 +1,5 @@
+import { fetchStudent } from "@/lib/actions/student.actions";
+import { StudentRole } from "@/lib/objects/student.roles";
 import { NextAuth_ProviderName } from "@/objects/next-auth.literals";
 import Autogestion from "autogestion-frvm";
 import type { NextAuthConfig } from "next-auth";
@@ -15,11 +17,22 @@ export interface UserSession {
     code: number;
     name: string;
   };
+  subscription?: {
+    role: StudentRole;
+    profilePicture?: string;
+    email?: string;
+    phone?: string;
+    createdAt: string;
+  };
 }
 
 export const authOptions: NextAuthConfig = {
   callbacks: {
-    async jwt({ token, user }) {
+    async jwt({ token, user, trigger, session }) {
+      if (trigger === "update")
+        // Update the user's subscription data.
+        token["subscription"] = session.subscription;
+
       // Assign the user to the token.
       if (user) token = { ...token, ...user };
 
@@ -76,6 +89,19 @@ export const authOptions: NextAuthConfig = {
               name: especialidad.nombre,
             },
           };
+
+          // Obtain subscription data, if the user is subscribed.
+          const student = await fetchStudent(+academicId);
+
+          if (student)
+            // Attach subscription data to the user.
+            user["subscription"] = {
+              role: student.role,
+              profilePicture: student?.profilePicture,
+              email: student?.email,
+              phone: student?.phone,
+              createdAt: student.createdAt!.toISOString(),
+            };
 
           // Return the user session.
           return user;
