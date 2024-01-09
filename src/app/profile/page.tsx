@@ -10,7 +10,7 @@ export default async function Profile() {
 
   return (
     <MainDashboard>
-      <ProfilePanel user={session.user} />
+      <ProfilePanel />
     </MainDashboard>
   );
 }
