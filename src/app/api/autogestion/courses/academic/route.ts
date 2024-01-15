@@ -1,8 +1,9 @@
 import { AcademicStatusEntry } from "autogestion-frvm/types";
-import { UserSession, auth } from "../../../auth/[...nextauth]/route";
+import { auth } from "@/app/auth";
 import { buildClient } from "../../client.wrapper";
 import { NextResponse } from "next/server";
 import { AcademicEntry } from "@/types/api/academic.entry";
+import { UserSession } from "@/lib/types/auth.types";
 
 // NOTE: This is PURELY for the Vercel deployment. Remove this when on development.
 // export const runtime = 'edge';

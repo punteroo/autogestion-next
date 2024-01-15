@@ -1,5 +1,5 @@
+import { UserSession } from "@/lib/types/auth.types";
 import Autogestion from "autogestion-frvm";
-import { UserSession } from "../auth/[...nextauth]/route";
 import type { ClientSection } from "autogestion-frvm/client";
 
 export async function buildClient(user: UserSession): Promise<Autogestion> {

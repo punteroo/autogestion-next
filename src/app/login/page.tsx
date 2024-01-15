@@ -1,6 +1,6 @@
 import LoginPanel from "../components/Login/LoginPanel";
 import { NextAuth_ProviderName } from "@/objects/next-auth.literals";
-import { auth } from "../api/auth/[...nextauth]/route";
+import { auth } from "@/app/auth";
 import { redirect } from 'next/navigation';
 
 export default async function SignIn() {

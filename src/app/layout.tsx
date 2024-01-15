@@ -1,7 +1,6 @@
 import "./globals.css";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import { auth } from "./api/auth/[...nextauth]/route";
 import NextAuth from "./components/SessionProvider";
 import { Providers } from "./providers";
 import { DashboardContextProvider } from "./context/DashboardContext";
@@ -9,6 +8,7 @@ import { Analytics } from "@vercel/analytics/react";
 import { extractRouterConfig } from "uploadthing/server";
 import { avatarUpload } from "./api/uploadthing/core";
 import { NextSSRPlugin } from "@uploadthing/react/next-ssr-plugin";
+import { auth } from "@/app/auth";
 
 const inter = Inter({ subsets: ["latin"] });
 

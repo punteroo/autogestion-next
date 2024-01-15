@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
-import { auth } from "../api/auth/[...nextauth]/route";
+import { auth } from "@/app/auth";
 import MainDashboard from "../components/Dashboard/MainDashboard";
 import ProfilePanel from "../components/Profile/ProfilePanel";
 

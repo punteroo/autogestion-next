@@ -1,6 +1,7 @@
-import { UserSession, auth } from "../../auth/[...nextauth]/route";
+import { UserSession } from "@/lib/types/auth.types";
 import { buildClient } from "../client.wrapper";
 import { NextResponse } from "next/server";
+import { auth } from "@/app/auth";
 
 export async function GET(request: Request): Promise<NextResponse | Response> {
   try {
