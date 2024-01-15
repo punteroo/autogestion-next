@@ -24,6 +24,11 @@ export const NextAuth_Config: NextAuthConfig = {
 
       return session;
     },
+    async redirect({ url, baseUrl }) {
+      if (url.startsWith("/")) return `${baseUrl}${url}`;
+
+      return baseUrl;
+    },
   },
   providers: [
     CredentialsProvider({

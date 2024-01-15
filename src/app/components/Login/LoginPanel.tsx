@@ -27,14 +27,15 @@ export default function LoginPanel({ providerName }: { providerName: string }) {
     toast.promise(
       // Hacky promise to make toast work correctly.
       new Promise<Array<ClientSection>>(async (resolve, reject) => {
-        const result = await signIn(providerName, {
-          academicId: academicId.current,
-          password: password.current,
-          redirect: false,
-        });
+        try {
+          const result = await signIn(providerName, {
+            academicId: academicId.current,
+            password: password.current,
+            redirect: false,
+          });
 
-        if (result!.error) reject(result!.error);
-        else {
+          if (result!.error) return reject(result!.error);
+
           // Fetch available sections to expose them to the context.
           const sections = await getSections(
             academicId.current!,
@@ -42,6 +43,23 @@ export default function LoginPanel({ providerName }: { providerName: string }) {
           );
 
           resolve(sections);
+        } catch (e) {
+          // FIXME: Hacky method to ignore the redirect URL error from NextAuth, until fixed on the main stable release.
+          if (
+            (e as any).message.includes(
+              "Failed to construct 'URL': Invalid base URL"
+            )
+          ) {
+            const sections = await getSections(
+              academicId.current!,
+              password.current!
+            );
+
+            return resolve(sections);
+          }
+
+          console.error(e);
+          reject("Error desconocido. Contacta con el administrador.");
         }
       }),
       {
@@ -52,7 +70,8 @@ export default function LoginPanel({ providerName }: { providerName: string }) {
             setSections(data as Array<ClientSection>);
 
             // Redirect in a few seconds.
-            setTimeout(() => router.push("/"), 1500);
+            // FIXME: Should use the router instead, until NextAuth fixes this this is a temporary solution.
+            setTimeout(() => (window.location.href = "/"), 1500);
 
             return "Gracias por iniciar sesión. Ya te redireccionamos...";
           },
@@ -60,6 +79,9 @@ export default function LoginPanel({ providerName }: { providerName: string }) {
         error: {
           render: ({ data }) => {
             setIsLoading(false);
+
+            console.log(data);
+
             return (
               (data as string) ??
               "Error desconocido. Contacta con el administrador."
@@ -141,8 +163,12 @@ export default function LoginPanel({ providerName }: { providerName: string }) {
         </div>
         <div className="bg-slate-300 h-0.5 w-full my-4"></div>
         <div className="grid grid-cols-3 gap-y-2 text-xs font-semibold text-center w-full mx-auto">
-          <Link href="https://github.com/punteroo/autogestion-next">GitHub</Link>
-          <Link href="https://github.com/punteroo/autogestion-next/issues">Soporte</Link>
+          <Link href="https://github.com/punteroo/autogestion-next">
+            GitHub
+          </Link>
+          <Link href="https://github.com/punteroo/autogestion-next/issues">
+            Soporte
+          </Link>
           <Link href="https://frvm.utn.edu.ar">UTN FRVM</Link>
         </div>
       </div>
