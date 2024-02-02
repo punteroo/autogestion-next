@@ -50,6 +50,22 @@ Opcionalmente, ajusta las **variables de entorno** desde el archivo `.env`.
 ## Production Deployment
 Puedes desplegar el proyecto en cualquier ambiente productivo virtualizado. Utiliza el `Dockerfile` provisto en el proyecto para crear tu propia imágen y ejecutar el contenedor en tu proveedor de preferencia (Cloud Run, Vercel, AWS EC2, etcétera).
 
+### Habilitar [`standalone` Next Output](https://nextjs.org/docs/app/api-reference/next-config-js/output#automatically-copying-traced-files)
+**Importante**: Editar `next.config.js` y establecer el `output` en `standalone`. Esto hace que el build de la imágen sea unitario y no dependa del scripting de Next para correr el aplicativo completo.
+```js
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  output: 'standalone',
+  experimental: {
+    serverActions: true,
+  },
+};
+
+module.exports = nextConfig;
+```
+
+### Construcción de la Imágen
+
 ```bash
 $ cd autogestion-next
 $ docker build -t autogestion-next .
