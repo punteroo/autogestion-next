@@ -51,7 +51,7 @@ Opcionalmente, ajusta las **variables de entorno** desde el archivo `.env`.
 Puedes desplegar el proyecto en cualquier ambiente productivo virtualizado. Utiliza el `Dockerfile` provisto en el proyecto para crear tu propia imágen y ejecutar el contenedor en tu proveedor de preferencia (Cloud Run, Vercel, AWS EC2, etcétera).
 
 ### Habilitar [`standalone` Next Output](https://nextjs.org/docs/app/api-reference/next-config-js/output#automatically-copying-traced-files)
-**Importante**: Editar `next.config.js` y establecer el `output` en `standalone`. Esto hace que el build de la imágen sea unitario y no dependa del scripting de Next para correr el aplicativo completo.
+**Importante**: Editar `next.config.js` y establecer el `output` en `standalone`. Esto hace que el build de la app sea unitaria y no dependa del scripting de Next para correr el aplicativo completo. Más información en el link del header.
 ```js
 /** @type {import('next').NextConfig} */
 const nextConfig = {
