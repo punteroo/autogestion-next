@@ -77,16 +77,15 @@ export function NavBarSections({
           </DropdownItem>
           <DropdownItem
             key="horarioCursado"
-            description="Consulta los horarios de tus materias actuales."
+            description="Consulta los horarios de tus materias en curso."
             startContent={<CalendarIcon />}
-            href="#"
-            isDisabled
+            href="/courses/schedule"
           >
             Horarios de Cursado
           </DropdownItem>
           <DropdownItem
             key="examenes"
-            description="Verifica tus notas de cada exámen final rendido."
+            description="Verifica las notas de cada exámen final que rendiste."
             startContent={<ClipboardIcon />}
             href="/exams"
             isDisabled={!isSectionAvailable("examenes")}
@@ -114,7 +113,7 @@ export function NavBarSections({
         <DropdownMenu variant="flat">
           <DropdownItem
             key="inscripcionExamen"
-            description="Realiza tu inscripción a exámen final, o simplemente ve y firma tu libreta."
+            description="Inscríbete a una o varias materias que hayas regularizado o promocionado."
             startContent={<PencilSquareIcon />}
             href="/exams/inscription"
             isDisabled={!isSectionAvailable("inscripcionExamen")}
@@ -123,7 +122,7 @@ export function NavBarSections({
           </DropdownItem>
           <DropdownItem
             key="inscripcionCursado"
-            description="Inscríbete a tus materias de preferencia."
+            description="Inscríbete a tus materias pendientes de cursar."
             startContent={<PencilSquareIcon />}
             href="/courses/inscription"
             isDisabled={!isSectionAvailable("inscripcionCursado")}
