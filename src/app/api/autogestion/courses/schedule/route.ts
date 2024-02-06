@@ -26,7 +26,7 @@ export async function GET(req: Request): Promise<NextResponse | Response> {
       const day = date.getDay();
 
       // Is this entry from this year?
-      //if (date.getFullYear() < new Date().getFullYear()) return false;
+      if (date.getFullYear() < new Date().getFullYear()) return false;
 
       return (
         self.findIndex(
