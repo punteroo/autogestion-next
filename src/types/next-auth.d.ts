@@ -1,4 +1,5 @@
-import 'next-auth';
+import { StudentRole } from "@/lib/objects/student.roles";
+import "next-auth";
 
 declare module "next-auth" {
   interface Session {
@@ -20,6 +21,13 @@ declare module "next-auth" {
       id: number;
       code: number;
       name: string;
+    };
+    subscription?: {
+      role: StudentRole;
+      profilePicture?: string;
+      email?: string;
+      phone?: string;
+      createdAt: string;
     };
   }
 }

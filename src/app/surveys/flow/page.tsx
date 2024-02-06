@@ -2,10 +2,9 @@ import MainDashboard from "@/app/components/Dashboard/MainDashboard";
 import MainSurveyFlow from "@/app/components/Surveys/Flow/MainSurveyFlow";
 import { PollEntry } from "autogestion-frvm/types";
 import Link from "next/link";
-import Image from "next/image";
 import { PollAnswerFlowProvider } from "@/app/context/PollAnswerContext";
 import { buildClient } from "@/app/api/autogestion/client.wrapper";
-import { auth } from "@/app/api/auth/[...nextauth]/route";
+import { auth } from "@/app/auth";
 
 type SurveyFlowPageProps = {
   params: { slug: string };

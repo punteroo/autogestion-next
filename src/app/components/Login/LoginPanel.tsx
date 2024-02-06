@@ -10,6 +10,13 @@ import { useContext, useRef, useState } from "react";
 
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/ReactToastify.min.css";
+import { NexusLogo } from "../Icons/NexusLogo";
+import { Button, Input } from "@nextui-org/react";
+import EyeSlashFilledIcon from "../Icons/EyeSlashFilledIcon";
+import EyeFilledIcon from "../Icons/EyeFilledIcon";
+import GitHubLogo from "../Icons/Logos/GitHubLogo";
+import { AcademicIcon } from "../Icons/AcademicIcon";
+import UTNLogo from "../Icons/Logos/UTNLogo";
 
 export default function LoginPanel({ providerName }: { providerName: string }) {
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -18,30 +25,49 @@ export default function LoginPanel({ providerName }: { providerName: string }) {
 
   const router = useRouter();
 
-  const academicId = useRef<string>();
-  const password = useRef<string>();
+  const [academicId, setAcademicId] = useState<string | undefined>(undefined);
+  const [password, setPassword] = useState<string | undefined>(undefined);
 
   async function submitLogin() {
+    if (!academicId?.length || !password?.length)
+      return toast.error("Por favor, completa todos los campos.");
+
     setIsLoading(true);
 
     toast.promise(
       // Hacky promise to make toast work correctly.
       new Promise<Array<ClientSection>>(async (resolve, reject) => {
-        const result = await signIn(providerName, {
-          academicId: academicId.current,
-          password: password.current,
-          redirect: false,
-        });
+        try {
+          const result = await signIn(providerName, {
+            academicId,
+            password,
+            redirect: false,
+          });
 
-        if (result!.error) reject(result!.error);
-        else {
+          if (result!.error) return reject(result!.error);
+
           // Fetch available sections to expose them to the context.
-          const sections = await getSections(
-            academicId.current!,
-            password.current!
-          );
+          const sections = await getSections(academicId, password);
 
           resolve(sections);
+        } catch (e) {
+          // FIXME: Hacky method to ignore the redirect URL error from NextAuth, until fixed on the main stable release.
+          if (
+            (e as any).message.includes(
+              "Failed to construct 'URL': Invalid base URL"
+            )
+          ) {
+            try {
+              const sections = await getSections(academicId, password);
+
+              return resolve(sections);
+            } catch (e) {
+              return reject(e);
+            }
+          }
+
+          console.error(e);
+          return reject(e);
         }
       }),
       {
@@ -52,14 +78,18 @@ export default function LoginPanel({ providerName }: { providerName: string }) {
             setSections(data as Array<ClientSection>);
 
             // Redirect in a few seconds.
-            setTimeout(() => router.push("/"), 1500);
+            // FIXME: Should use the router instead, until NextAuth fixes this this is a temporary solution.
+            setTimeout(() => (window.location.href = "/"), 1500);
 
             return "Gracias por iniciar sesión. Ya te redireccionamos...";
           },
         },
         error: {
-          render: ({ data }) => {
+          render: ({ data }: any) => {
             setIsLoading(false);
+
+            if (data?.message) return data.message;
+
             return (
               (data as string) ??
               "Error desconocido. Contacta con el administrador."
@@ -69,6 +99,10 @@ export default function LoginPanel({ providerName }: { providerName: string }) {
       }
     );
   }
+
+  /** State that controls password field visibility. */
+  const [isVisible, setIsVisible] = useState(false);
+  const toggleVisibility = () => setIsVisible(!isVisible);
 
   return (
     <>
@@ -86,7 +120,7 @@ export default function LoginPanel({ providerName }: { providerName: string }) {
         theme="dark"
       />
 
-      <div className="bg-slate-100 rounded-xl flex-col relative w-full md:w-[35%] p-8 m-auto text-black">
+      {/* <div className="bg-slate-100 rounded-xl flex-col relative w-full md:w-[35%] p-8 m-auto text-black">
         <div className="text-center p-4">
           <h1 className="font-bold">Autogestión</h1>
           <h3>Inicia con tu legajo y contraseña</h3>
@@ -141,9 +175,97 @@ export default function LoginPanel({ providerName }: { providerName: string }) {
         </div>
         <div className="bg-slate-300 h-0.5 w-full my-4"></div>
         <div className="grid grid-cols-3 gap-y-2 text-xs font-semibold text-center w-full mx-auto">
-          <Link href="https://github.com/punteroo/autogestion-next">GitHub</Link>
-          <Link href="https://github.com/punteroo/autogestion-next/issues">Soporte</Link>
+          <Link href="https://github.com/punteroo/autogestion-next">
+            GitHub
+          </Link>
+          <Link href="https://github.com/punteroo/autogestion-next/issues">
+            Soporte
+          </Link>
           <Link href="https://frvm.utn.edu.ar">UTN FRVM</Link>
+        </div>
+      </div> */}
+
+      <div className="flex items-center justify-center">
+        <div
+          className="flex h-screen w-screen items-center justify-start overflow-hidden rounded-small bg-content1 p-2 sm:p-4 lg:p-8"
+          style={{
+            backgroundImage: "url('/login_background.jpg')",
+            backgroundSize: "cover",
+            backgroundPosition: "center center",
+          }}
+        >
+          <div className="absolute right-10 top-10">
+            <div className="flex items-center gap-2">
+              <NexusLogo />
+              <p className="font-bold text-inherit">NEXUS</p>
+            </div>
+          </div>
+          <div className="absolute bottom-10 right-10 flex flex-col items-end">
+            <p className="max-w-xl text-right text-white/60">
+              <span className="font-medium">“</span>Tu progreso académico,
+              simplificado.
+              <span className="font-medium">”</span>
+            </p>
+            <div className="self-end">
+              <div className="flex gap-2 items-center h-8">
+                <Link
+                  href="https://github.com/punteroo/autogestion-next"
+                  target="_blank"
+                >
+                  <GitHubLogo />
+                </Link>
+                <Link href="https://frvm.utn.edu.ar" target="_blank">
+                  <UTNLogo />
+                </Link>
+              </div>
+            </div>
+          </div>
+          <div className="flex w-full sm:max-w-sm flex-col gap-4 rounded-large bg-content1 px-8 pb-10 pt-6 shadow-small">
+            <p className="text-2xl font-semibold">Iniciar Sesión</p>
+            <div className="flex flex-col gap-3">
+              <Input
+                variant="bordered"
+                label="Legajo"
+                placeholder="123456"
+                isRequired
+                disabled={isLoading}
+                value={academicId}
+                onChange={(e) => setAcademicId(e.target.value)}
+              />
+              <Input
+                variant="bordered"
+                label="Contraseña"
+                placeholder="Su contraseña"
+                isRequired
+                disabled={isLoading}
+                type={isVisible ? "text" : "password"}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                endContent={
+                  <button
+                    className="focus:outline-none"
+                    type="button"
+                    onClick={toggleVisibility}
+                  >
+                    {isVisible ? (
+                      <EyeSlashFilledIcon className="text-2xl text-default-400 pointer-events-none" />
+                    ) : (
+                      <EyeFilledIcon className="text-2xl text-default-400 pointer-events-none" />
+                    )}
+                  </button>
+                }
+              />
+            </div>
+            <Button
+              variant="solid"
+              color="primary"
+              className="w-full"
+              isDisabled={isLoading}
+              onClick={submitLogin}
+            >
+              Iniciar Sesión
+            </Button>
+          </div>
         </div>
       </div>
     </>

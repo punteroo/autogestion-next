@@ -1,9 +1,7 @@
-import { AvailableExam } from "autogestion-frvm/types";
-import { UserSession, auth } from "../../../../auth/[...nextauth]/route";
+import { auth } from "@/app/auth";
 import { buildClient } from "../../../client.wrapper";
 import { NextRequest, NextResponse } from "next/server";
-import Autogestion from "autogestion-frvm";
-import { CourseStatus } from "autogestion-frvm/courses";
+import { UserSession } from "@/lib/types/auth.types";
 
 export async function GET(
   request: NextRequest

@@ -1,4 +1,5 @@
-import { UserSession, auth } from "../../auth/[...nextauth]/route";
+import { UserSession } from "@/lib/types/auth.types";
+import { auth } from "@/app/auth";
 import { buildClient } from "../client.wrapper";
 import { NextResponse } from "next/server";
 

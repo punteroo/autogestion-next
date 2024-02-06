@@ -15,9 +15,9 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import AcademicStatusYearEntry from "./AcademicStatusYearEntry";
 import { AcademicEntry } from "@/types/api/academic.entry";
-import { UserSession } from "@/app/api/auth/[...nextauth]/route";
 import { useSession } from "next-auth/react";
 import FailedLoad from "../../FailedLoad";
+import { UserSession } from "@/lib/types/auth.types";
 
 export default function AcademicStatusPanel() {
   const { data: session } = useSession();

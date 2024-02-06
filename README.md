@@ -16,6 +16,10 @@ Si encuentras mejoras, decides colaborar al proyecto o consideras un cambio nece
 ## Local Deployment
 El proyecto asume el uso núcleo de [el wrapper de autogestión](https://github.com/punteroo/autogestion-frvm) (tampoco oficial) para su funcionamiento correcto.
 
+Antes de comenzar, debes tener lo siguiente:
+- Un servidor de MongoDB (local, virtualizado o hosteado)
+- Cuenta en [**UploadThing**](https://uploadthing.com)
+
 Para ejecutar el proyecto, necesitas **Node v20** y **yarn**. Sigue esta guía para instalarlos.
 
 1. Clonar el proyecto localmente.
@@ -43,9 +47,17 @@ $ pwd
 $ yarn install
 ```
 
-5. Ejecutar localmente con **`yarn dev`**
+5. Modificar el archivo `.env` para rellenar tus credenciales privadas. El resto las puedes dejar como están.
+```
+# Connection string de tu MongoDB
+MONGODB_URI="mongodb://user:password@host:port/dbName"
+# API key de tu proyecto de UploadThing
+UPLOADTHING_SECRET="sk_live_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+```
 
-Opcionalmente, ajusta las **variables de entorno** desde el archivo `.env`.
+6. Ejecutar localmente con **`yarn dev`**
+
+Opcionalmente, ajusta las otras **variables de entorno** para tus necesidades.
 
 ## Production Deployment
 Puedes desplegar el proyecto en cualquier ambiente productivo virtualizado. Utiliza el `Dockerfile` provisto en el proyecto para crear tu propia imágen y ejecutar el contenedor en tu proveedor de preferencia (Cloud Run, Vercel, AWS EC2, etcétera).
@@ -72,7 +84,7 @@ $ docker build -t autogestion-next .
 # Proceso de build de imágen
 # ...
 # Crear un contenedor nuevo
-$ docker run --name autogestion -p 3000:3000 -e NODE_ENV=production autogestion-next
+$ docker run --name autogestion -p 3000:3000 -e NODE_ENV=production -e MONGODB_URI="mongodb://user:password@host:port/dbName" -e UPLOADTHING_SECRET="sk_live_xxxx" autogestion-next
 ```
 
 ## Discreción Legal

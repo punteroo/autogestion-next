@@ -1,14 +1,13 @@
-import { auth } from "@/app/api/auth/[...nextauth]/route";
+import { auth } from "@/app/auth";
 import { NextRequest, NextResponse } from "next/server";
 import { buildClient } from "../../client.wrapper";
 import { PollEntry } from "autogestion-frvm/types";
-import { AutogestionResponse } from "@/types/api/autogestion.http.wrapper";
 
 export async function POST(req: NextRequest): Promise<any> {
   // Is the user authenticated?
   const session = await auth();
 
-  if (!session.user) return NextResponse.error();
+  if (!session?.user) return NextResponse.error();
 
   // Build the client.
   const client = await buildClient(session.user);
@@ -31,7 +30,7 @@ export async function PATCH(req: NextRequest): Promise<any> {
   // Is the user authenticated?
   const session = await auth();
 
-  if (!session.user) return NextResponse.error();
+  if (!session?.user) return NextResponse.error();
 
   try {
     // Build the client.

@@ -1,11 +1,14 @@
 import "./globals.css";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import { auth } from "./api/auth/[...nextauth]/route";
 import NextAuth from "./components/SessionProvider";
-import { NextUI } from "./providers";
+import { Providers } from "./providers";
 import { DashboardContextProvider } from "./context/DashboardContext";
 import { Analytics } from "@vercel/analytics/react";
+import { extractRouterConfig } from "uploadthing/server";
+import { avatarUpload } from "./api/uploadthing/core";
+import { NextSSRPlugin } from "@uploadthing/react/next-ssr-plugin";
+import { auth } from "@/app/auth";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -33,10 +36,11 @@ export default async function RootLayout({
       <body className={`${inter.className} dark bg-background min-h-screen`}>
         <DashboardContextProvider>
           <NextAuth session={session}>
-            <NextUI>
+            <Providers>
+              <NextSSRPlugin routerConfig={extractRouterConfig(avatarUpload)} />
               {children}
               <Analytics />
-            </NextUI>
+            </Providers>
           </NextAuth>
         </DashboardContextProvider>
         <script

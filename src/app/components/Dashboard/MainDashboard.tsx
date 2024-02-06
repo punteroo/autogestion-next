@@ -1,5 +1,5 @@
 import NavBar from "../NavBar";
-import { auth } from "../../api/auth/[...nextauth]/route";
+import { auth } from "@/app/auth";
 import { redirect } from "next/navigation";
 import { NexusLogo } from "../Icons/NexusLogo";
 import Link from "next/link";

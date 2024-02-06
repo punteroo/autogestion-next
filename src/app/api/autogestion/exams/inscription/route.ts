@@ -1,5 +1,5 @@
 import { AvailableExam } from "autogestion-frvm/types";
-import { UserSession, auth } from "../../../auth/[...nextauth]/route";
+import { auth } from "@/app/auth";
 import { buildClient } from "../../client.wrapper";
 import { NextRequest, NextResponse } from "next/server";
 import Autogestion from "autogestion-frvm";
@@ -9,6 +9,7 @@ import {
   AutogestionError_NotLoggedIn,
 } from "@/objects/autogestion.api.constants";
 import { ExamInscriptionRequest } from "@/types/api/exam.inscription.request";
+import { UserSession } from "@/lib/types/auth.types";
 
 /**
  * Takes the list of available exams and compares it with the list of exams the student can actually take.
