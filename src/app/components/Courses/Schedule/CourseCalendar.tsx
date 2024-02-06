@@ -4,6 +4,7 @@ import { CourseCalendarEntry } from "autogestion-frvm/courses";
 import { v4 } from "uuid";
 import { Card, CardBody, CardHeader, Tab, Tabs } from "@nextui-org/react";
 import { useState } from "react";
+import { AcademicIcon } from "../../Icons/AcademicIcon";
 
 type CourseCalendarProps = {
   calendar: Array<CourseCalendarEntry>;
@@ -65,7 +66,12 @@ export default function CourseCalendar({ calendar }: CourseCalendarProps) {
   const [selectedDay, setSelectedDay] = useState(1);
 
   return (
-    <Tabs onSelectionChange={setSelectedDay as any} selectedKey={selectedDay}>
+    <Tabs
+      variant="underlined"
+      onSelectionChange={setSelectedDay as any}
+      selectedKey={selectedDay}
+      className="w-full"
+    >
       {weekDays.map((day) => {
         // Fetch all events for the current day.
         const events = getEventsForDay(day.day);
@@ -89,12 +95,17 @@ export default function CourseCalendar({ calendar }: CourseCalendarProps) {
 
         return (
           <Tab key={day.day} title={day.name}>
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-col gap-2 sm:grid sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4">
               {events.map((event) => (
                 <Card key={v4()}>
                   <CardHeader>
                     <div className="flex flex-col gap-1">
-                      <h3 className="text-foreground">{event.nombremateria}</h3>
+                      <div className="flex gap-2 items-center">
+                        <AcademicIcon />
+                        <h3 className="text-foreground">
+                          {event.nombremateria}
+                        </h3>
+                      </div>
                       <h4 className="text-foreground-500 text-sm">
                         {event.docente}
                       </h4>

@@ -196,38 +196,40 @@ export default function CurrentCourseSchedule() {
           </p>
         </div>
       ) : (
-        <Card>
-          <CardHeader>
-            <p className="text-foreground-400 text-center text-sm">
-              Los horarios que visualizas aquí son para materias en las que
-              estás actualmente inscripto. Es posible que veas materias ya
-              aprobadas aquí, luego de que abran las inscripciones a cursado
-              dejarás de visualizarlas.
-            </p>
-          </CardHeader>
-          <CardBody>
-            <CourseCalendar calendar={calendar} />
-          </CardBody>
-          {calendar.length > 0 ? (
-            <CardFooter>
-              <div className="flex flex-col gap-2">
-                <p className="text-foreground-400 text-center text-sm">
-                  Puedes exportar tus horarios de cursado a un calendario para
-                  importar en Google, Outlook o el mismo calendario de tu
-                  teléfono.
-                </p>
-                <Button
-                  variant="bordered"
-                  color="primary"
-                  className="w-full"
-                  onClick={() => generateICalendar(calendar)}
-                >
-                  Exportar
-                </Button>
-              </div>
-            </CardFooter>
-          ) : null}
-        </Card>
+        <div className="sm:mx-4">
+          <Card>
+            <CardHeader>
+              <p className="text-foreground-400 text-center text-sm sm:w-full">
+                Los horarios que visualizas aquí son para materias en las que
+                estás actualmente inscripto. Es posible que veas materias ya
+                aprobadas aquí, luego de que abran las inscripciones a cursado
+                dejarás de visualizarlas.
+              </p>
+            </CardHeader>
+            <CardBody>
+              <CourseCalendar calendar={calendar} />
+            </CardBody>
+            {calendar.length > 0 ? (
+              <CardFooter>
+                <div className="flex flex-col gap-2 sm:w-full sm:items-center">
+                  <p className="text-foreground-400 text-center text-sm">
+                    Puedes exportar tus horarios de cursado a un calendario para
+                    importar en Google, Outlook o el mismo calendario de tu
+                    teléfono.
+                  </p>
+                  <Button
+                    variant="bordered"
+                    color="primary"
+                    className="w-full sm:w-max"
+                    onClick={() => generateICalendar(calendar)}
+                  >
+                    Exportar
+                  </Button>
+                </div>
+              </CardFooter>
+            ) : null}
+          </Card>
+        </div>
       )}
     </>
   );
