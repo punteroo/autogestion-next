@@ -33,7 +33,6 @@ export async function getSections(
 
     return sections;
   } catch (e) {
-    console.error(e);
     throw e;
   }
 }

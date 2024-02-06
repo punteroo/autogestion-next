@@ -10,7 +10,7 @@ export default async function SignIn() {
   if (session && session?.user) return redirect("/")
 
   return (
-    <main className="min-h-screen p-8 bg-slate-700 w-full">
+    <main>
       <LoginPanel providerName={NextAuth_ProviderName} />
     </main>
   );
