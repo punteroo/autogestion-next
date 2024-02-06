@@ -18,7 +18,7 @@ export async function GET(req: Request): Promise<NextResponse | Response> {
     // Has the raw parameter been passed?
     const params = new URL(req.url).searchParams;
 
-    if (params.has("raw", "true")) return NextResponse.json(schedule);
+    if (params.get("raw") === "true") return NextResponse.json(schedule);
 
     // Format the entries and return them back.
     const uniqueEntries = schedule.filter((entry, index, self) => {
