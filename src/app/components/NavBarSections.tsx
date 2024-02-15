@@ -13,6 +13,9 @@ import { BookIcon } from "./Icons/BookIcon";
 import { CalendarIcon } from "./Icons/CalendarIcon";
 import { ClipboardIcon } from "./Icons/ClipboardIcon";
 import { PencilSquareIcon } from "./Icons/PencilSquareIcon";
+import { useSession } from "next-auth/react";
+import { UserIcon } from "./Icons/UserIcon";
+import { isStudentOnOverService } from "@/lib/subscription.utils";
 
 type NavBarSections_WebProps = {
   pathName: string;
@@ -28,6 +31,8 @@ export function NavBarSections({
       sections?.find((s) => s?.nombreSeccion === section)?.habilitada ?? false
     );
   }
+
+  const { data: session } = useSession();
 
   return (
     <>
@@ -150,6 +155,38 @@ export function NavBarSections({
           </span>
         </div>
       )}
+      <Dropdown
+        backdrop="blur"
+        isDisabled={!isStudentOnOverService(session?.user)}
+      >
+        <DropdownTrigger>
+          <div className="lg:w-max md:h-max">
+            <span
+              className={`text-4xl sm:text-sm font-semibold ${
+                ["/overservice"].includes(pathName)
+                  ? "text-blue-600"
+                  : "text-foreground"
+              } cursor-pointer ${
+                isStudentOnOverService(session?.user)
+                  ? ""
+                  : "cursor-not-allowed !text-foreground-200"
+              }`}
+            >
+              OverService
+            </span>
+          </div>
+        </DropdownTrigger>
+        <DropdownMenu variant="flat">
+          <DropdownItem
+            key="overServiceUsers"
+            description="Busca en el índice a otros estudiantes adheridos a OverService."
+            startContent={<UserIcon />}
+            href="/overservice/users"
+          >
+            Usuarios
+          </DropdownItem>
+        </DropdownMenu>
+      </Dropdown>
     </>
   );
 }

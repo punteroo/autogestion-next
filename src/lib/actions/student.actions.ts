@@ -48,6 +48,41 @@ export async function fetchStudent(
 }
 
 /**
+ * Searches for a list of students adhered to OverService.
+ *
+ * @param {string} [query] The query to search for. Default is none.
+ * @param {number} [limit] The maximum amount of students to return. Default is 25.
+ * @param {number} [offset] The amount of students to skip, if paging results. Default is 0.
+ *
+ * @returns {Promise<Array<Partial<Student>>>} The list of students.
+ */
+export async function searchStudents(
+  query?: string,
+  limit?: number,
+  offset?: number
+): Promise<Array<Partial<Student>>> {
+  await connect();
+
+  const search = query ? { $text: { $search: query } } : {};
+
+  const result: Array<Student> = await StudentModel.find(search)
+    .limit(limit ?? 25)
+    .skip(offset ?? 0);
+
+  // Remove certain data from the students.
+  return result.map(
+    ({ academicId, createdAt, name, lastName, profilePicture, role }) => ({
+      academicId,
+      createdAt,
+      name,
+      lastName,
+      profilePicture,
+      role,
+    })
+  );
+}
+
+/**
  * Updates a student's subscription data.
  *
  * @param {number} academicId The academic ID of the student to update.

@@ -5,6 +5,7 @@ import { ProfileActions } from "./ProfileActions";
 import { ProfileOverService } from "./ProfileOverService";
 import { useSession } from "next-auth/react";
 import { isStudentOnOverService } from "@/lib/subscription.utils";
+import { useEffect } from "react";
 
 export default function ProfilePanel() {
   const { data: session } = useSession();

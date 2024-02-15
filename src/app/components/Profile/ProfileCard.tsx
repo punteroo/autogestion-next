@@ -17,45 +17,45 @@ import { CodeBracketIcon } from "../Icons/CodeBracketIcon";
 import { StarIcon } from "../Icons/StarIcon";
 import { isStudentOnOverService } from "@/lib/subscription.utils";
 
+export function parseStudentRole(role: StudentRole | null): React.ReactNode {
+  switch (role) {
+    case StudentRole.STUDENT: {
+      return (
+        <Chip size="sm" color="default" startContent={<BookIcon />}>
+          Estudiante
+        </Chip>
+      );
+    }
+    case StudentRole.COLLABORATOR: {
+      return (
+        <Chip size="sm" color="success" startContent={<BankNotesIcon />}>
+          Colaborador
+        </Chip>
+      );
+    }
+    case StudentRole.DEVELOPER: {
+      return (
+        <Chip size="sm" color="warning" startContent={<CodeBracketIcon />}>
+          Desarrollador
+        </Chip>
+      );
+    }
+    case StudentRole.OWNER: {
+      return (
+        <Chip size="sm" color="secondary" startContent={<StarIcon />}>
+          Dueño
+        </Chip>
+      );
+    }
+    default:
+      return null;
+  }
+}
+
 export default function ProfileCard() {
   const { data: session } = useSession();
 
   const user = session?.user;
-
-  function parseStudentRole(role: StudentRole | null): React.ReactNode {
-    switch (role) {
-      case StudentRole.STUDENT: {
-        return (
-          <Chip size="sm" color="default" startContent={<BookIcon />}>
-            Estudiante
-          </Chip>
-        );
-      }
-      case StudentRole.COLLABORATOR: {
-        return (
-          <Chip size="sm" color="success" startContent={<BankNotesIcon />}>
-            Colaborador
-          </Chip>
-        );
-      }
-      case StudentRole.DEVELOPER: {
-        return (
-          <Chip size="sm" color="warning" startContent={<CodeBracketIcon />}>
-            Desarrollador
-          </Chip>
-        );
-      }
-      case StudentRole.OWNER: {
-        return (
-          <Chip size="sm" color="secondary" startContent={<StarIcon />}>
-            Dueño
-          </Chip>
-        );
-      }
-      default:
-        return null;
-    }
-  }
 
   return (
     <Card className="sm:min-w-max">
