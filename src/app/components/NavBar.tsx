@@ -1,30 +1,19 @@
 "use client";
 
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Navbar,
   NavbarContent,
   NavbarItem,
-  Button,
   NavbarMenuToggle,
-  NavbarMenuItem,
   NavbarMenu,
   NavbarBrand,
-  Dropdown,
-  DropdownTrigger,
-  DropdownMenu,
-  DropdownItem,
 } from "@nextui-org/react";
-import { UserIcon } from "./Icons/UserIcon";
-import { BookIcon } from "./Icons/BookIcon";
 import { useSession } from "next-auth/react";
 import { ClientSection } from "autogestion-frvm/client";
-import Link from "next/link";
-import { DashboardContext } from "../context/DashboardContext";
+import { useDashboard } from "../context/DashboardContext";
 import axios from "axios";
 import NavBarLogOut from "./NavBarLogOut";
-import { AcademicIcon } from "./Icons/AcademicIcon";
-import { DocumentCheckIcon } from "./Icons/DocumentCheckIcon";
 import { motion } from "framer-motion";
 import { NexusLogo } from "./Icons/NexusLogo";
 import { usePathname } from "next/navigation";
@@ -51,7 +40,7 @@ export default function NavBar() {
 
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
 
-  const { sections, setSections } = useContext(DashboardContext);
+  const { sections, setSections } = useDashboard();
 
   useEffect(() => {
     async function fetchSections() {
