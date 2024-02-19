@@ -48,6 +48,17 @@ export async function fetchStudent(
 }
 
 /**
+ * Returns the amount of registered students on OverService.
+ *
+ * @returns {Promise<number>} The amount of students.
+ */
+export async function getStudentsCount(): Promise<number> {
+  await connect();
+
+  return await StudentModel.countDocuments();
+}
+
+/**
  * Searches for a list of students adhered to OverService.
  *
  * @param {string} [query] The query to search for. Default is none.

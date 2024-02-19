@@ -9,6 +9,7 @@ import EnrolledExamsAccordion from "./Legacy/EnrolledExamsAccordion";
 import { motion } from "framer-motion";
 import AvailableExamCard from "./AvailableExamCard";
 import { useSession } from "next-auth/react";
+import { useDashboard } from "@/app/context/DashboardContext";
 
 function AvailableExamEntrySkeleton({
   amount,
