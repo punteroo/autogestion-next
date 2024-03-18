@@ -121,9 +121,9 @@ export default function CurrentCourseSchedule() {
           title: entry.nombremateria,
           description: `Aula ${entry.aulaNombre}`,
           start: dateToDateArray(startDate),
-          startInputType: "utc",
+          startInputType: "local",
           end: dateToDateArray(endDate),
-          endInputType: "utc",
+          endInputType: "local",
           location: "UTN Facultad Regional Villa María",
           alarms: [
             {
