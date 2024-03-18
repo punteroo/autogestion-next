@@ -97,7 +97,8 @@ export default function CurrentCourseSchedule() {
       ): [number, number, number, number, number] => {
         return [
           date.getFullYear(),
-          date.getMonth(),
+          // Add 1 always as JS months are 0-indexed.
+          date.getMonth() + 1,
           date.getDate(),
           date.getHours(),
           date.getMinutes(),
@@ -107,15 +108,22 @@ export default function CurrentCourseSchedule() {
       setCalendarGenerationStage(CalendarGenerationStatus.FORMATTING_CALENDAR);
 
       for (const entry of rawCalendar) {
+        // Obtain date objects from the start and end dates.
+        const startDate = new Date(entry.fechaInicio),
+          endDate = new Date(entry.fechaFin);
+
+        // If the start date is before March, ignore.
+        if (startDate.getMonth() < 2) continue;
+
         // Declare the start and end times for the event.
         events.push({
           calName: `Mis Clases ${new Date().getUTCFullYear()}`,
           title: entry.nombremateria,
           description: `Aula ${entry.aulaNombre}`,
-          start: dateToDateArray(new Date(entry.fechaInicio)),
-          startInputType: "local",
-          end: dateToDateArray(new Date(entry.fechaFin)),
-          endInputType: "local",
+          start: dateToDateArray(startDate),
+          startInputType: "utc",
+          end: dateToDateArray(endDate),
+          endInputType: "utc",
           location: "UTN Facultad Regional Villa María",
           alarms: [
             {
