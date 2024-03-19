@@ -17,17 +17,39 @@ import {
 import {
   AvailableCourse,
   AvailableCourseCommission,
+  EnrollCourseResponse,
 } from "autogestion-frvm/types";
 import { AcademicIcon } from "../../Icons/AcademicIcon";
 import { parseCourseLevel } from "../../Exams/Inscription/AvailableExamCard";
-import { useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import axios from "axios";
 
 type AvailableCourseProps = {
   course: AvailableCourse;
+  setAvailableCourses: Dispatch<SetStateAction<AvailableCourse[]>>;
+  openSuccess: () => void;
+
+  isEnrolling: boolean;
+  setIsEnrolling: Dispatch<SetStateAction<boolean>>;
+
+  setEnrollResult: Dispatch<SetStateAction<EnrollCourseResponse | undefined>>;
+
+  selectedCommission: AvailableCourseCommission | undefined;
+  setSelectedCommission: Dispatch<
+    SetStateAction<AvailableCourseCommission | undefined>
+  >;
 };
 
-export default function AvailableCourseEntry({ course }: AvailableCourseProps) {
+export default function AvailableCourseEntry({
+  course,
+  setAvailableCourses,
+  openSuccess,
+  isEnrolling,
+  setIsEnrolling,
+  setEnrollResult,
+  selectedCommission,
+  setSelectedCommission,
+}: AvailableCourseProps) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
   /** State that controls if a commission search is loading. */
@@ -52,6 +74,9 @@ export default function AvailableCourseEntry({ course }: AvailableCourseProps) {
     // Set the loading state on true.
     isLoading(true);
     setHasFailed(false);
+
+    // Clear enrollment result.
+    setEnrollResult(undefined);
 
     try {
       const { data } = await axios<Array<AvailableCourseCommission>>({
@@ -83,7 +108,15 @@ export default function AvailableCourseEntry({ course }: AvailableCourseProps) {
     if (!selectedCommission) return;
 
     try {
-      const { data } = await axios({
+      // Set enrollment state to true.
+      setIsEnrolling(true);
+      setHasFailed(false);
+
+      // Send the inscription request.
+      const { data } = await axios<{
+        enrollment: EnrollCourseResponse;
+        course: AvailableCourse;
+      }>({
         method: "POST",
         url: "/api/autogestion/courses/inscription",
         data: {
@@ -92,13 +125,75 @@ export default function AvailableCourseEntry({ course }: AvailableCourseProps) {
         },
       });
 
-      console.log(data);
-    } catch (e) {}
+      // State control for the enrollment.
+      setIsEnrolling(false);
+      setEnrollResult(data.enrollment);
+
+      // Update the course in the available courses list.
+      setAvailableCourses((prevCourses) => {
+        const index = prevCourses.findIndex(
+          (c) => c.codigoMateria === data.course.codigoMateria
+        );
+
+        if (index === -1) return prevCourses;
+
+        const newCourses = [...prevCourses];
+
+        newCourses[index] = data.course;
+
+        return newCourses;
+      });
+
+      // Close the modal.
+      onOpenChange();
+
+      // Open the success modal.
+      openSuccess();
+    } catch (e: any) {
+      console.error(e);
+
+      // State control for the error.
+      setIsEnrolling(false);
+      setHasFailed(true);
+      setError(e?.response?.data?.message || "Error desconocido.");
+      setEnrollResult(undefined);
+    }
   }
 
-  /** State that holds a selected commission. */
-  const [selectedCommission, setSelectedCommission] =
-    useState<AvailableCourseCommission>();
+  /**
+   * Function that parses an available course entry's date into a better format.
+   *
+   * @param {string} date The date to parse.
+   *
+   * @returns {string} The parsed date.
+   */
+  function parseDateFormat(date: string): string {
+    // Is this a multi-date?
+    const dates = date.split(",");
+
+    const res: string[] = [];
+    for (const date of dates) {
+      // Use a specially crafted regex to obtain date parts.
+      const result =
+        /(C[0-9]{1}) ?([L|l]unes|[M|m]artes|[M|m]i[e|é]rcoles|[J|j]ueves|[V|v]iernes) ? ([0-9]{2}:[0-9]{2})-?([0-9]{2}:[0-9]{2})/g.exec(
+          date
+        );
+
+      // Return the default date if no result was found.
+      if (!result) {
+        res.push(date);
+        continue;
+      }
+
+      // Obtain its parts.
+      const [original, commission, day, startsAt, endsAt] = result;
+
+      // Map it.
+      res.push(`${day} desde ${startsAt}hs hasta ${endsAt}hs`);
+    }
+
+    return res.join(" y ");
+  }
 
   return (
     <>
@@ -106,14 +201,16 @@ export default function AvailableCourseEntry({ course }: AvailableCourseProps) {
         isOpen={isOpen}
         onOpenChange={onOpenChange}
         backdrop="blur"
-        isDismissable={!loading}
-        hideCloseButton={loading}
+        isDismissable={!loading && !isEnrolling}
+        hideCloseButton={loading || isEnrolling}
       >
         <ModalContent>
           {(onClose) => (
             <>
               <ModalHeader className="flex flex-col gap-1">
-                Inscribirse a {course.nombreLargo}
+                {isEnrolling
+                  ? `Inscribiendo a ${course.nombreLargo}`
+                  : `Inscribirse a ${course.nombreLargo}`}
               </ModalHeader>
               <ModalBody>
                 {loading ? (
@@ -127,12 +224,19 @@ export default function AvailableCourseEntry({ course }: AvailableCourseProps) {
                   <div className="flex flex-col gap-2 items-center">
                     <p className="text-foreground-300">
                       <span className="text-red-700">
-                        Ocurrió un error al buscar comisiones para{" "}
+                        Ocurrió un error al buscar comisiones o inscribirte en{" "}
                         <span className="font-bold">{course.nombreLargo}</span>:
                       </span>{" "}
                       {error?.length
                         ? error
                         : "Error desconocido, intente con otra materia."}
+                    </p>
+                  </div>
+                ) : isEnrolling ? (
+                  <div className="flex flex-col gap-2 items-center">
+                    <Spinner />
+                    <p className="text-foreground-300">
+                      Te estamos inscribiendo a {course.nombreLargo}...
                     </p>
                   </div>
                 ) : (
@@ -163,7 +267,7 @@ export default function AvailableCourseEntry({ course }: AvailableCourseProps) {
                             {commision.nombreEspecialidad}
                           </h2>
                           <div className="flex flex-col gap-1 items-start text-foreground-500 text-xs">
-                            <p>{commision.horario}</p>
+                            <p>{parseDateFormat(commision.horario)}</p>
                             <p>Edificio {commision.edificio}</p>
                           </div>
                         </div>
@@ -176,15 +280,14 @@ export default function AvailableCourseEntry({ course }: AvailableCourseProps) {
                 <Button
                   color="danger"
                   variant="light"
-                  isDisabled={loading}
+                  isDisabled={loading || isEnrolling}
                   onPress={onClose}
                 >
                   Cerrar
                 </Button>
                 <Button
                   color="primary"
-                  onPress={onClose}
-                  isDisabled={loading || !selectedCommission}
+                  isDisabled={loading || !selectedCommission || isEnrolling}
                   onClick={() => enrollToCommission()}
                 >
                   Inscribirme

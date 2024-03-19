@@ -1,7 +1,22 @@
 "use client";
 
-import { Button, Card, CardBody, Spinner } from "@nextui-org/react";
-import { AvailableCourse } from "autogestion-frvm/types";
+import {
+  Button,
+  Card,
+  CardBody,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  Spinner,
+  useDisclosure,
+} from "@nextui-org/react";
+import {
+  AvailableCourse,
+  AvailableCourseCommission,
+  EnrollCourseResponse,
+} from "autogestion-frvm/types";
 import { motion } from "framer-motion";
 import { useSession } from "next-auth/react";
 import { redirect } from "next/navigation";
@@ -9,6 +24,7 @@ import { useEffect, useState } from "react";
 import AvailableCourseEntry from "./AvailableCourseEntry";
 import EnrolledCoursesPanel from "./EnrolledCoursesPanel";
 import axios from "axios";
+import { CheckIcon } from "../../Icons/CheckIcon";
 
 export default function CourseInscriptionPanel() {
   const { data: session } = useSession();
@@ -31,6 +47,12 @@ export default function CourseInscriptionPanel() {
   const [availableCourses, setAvailableCourses] = useState<
     Array<AvailableCourse>
   >([]);
+
+  const {
+    isOpen: isSuccessOpen,
+    onOpen: openSuccess,
+    onOpenChange: onSuccessOpenChange,
+  } = useDisclosure({ id: "success" });
 
   useEffect(() => {
     async function searchCourses() {
@@ -84,6 +106,51 @@ export default function CourseInscriptionPanel() {
     }
   }, [loading, loadingTimeout]);
 
+  /**
+   * Function that parses an available course entry's date into a better format.
+   *
+   * @param {string} date The date to parse.
+   *
+   * @returns {string} The parsed date.
+   */
+  function parseDateFormat(date: string): string {
+    // Is this a multi-date?
+    const dates = date.split(",");
+
+    const res: string[] = [];
+    for (const date of dates) {
+      // Use a specially crafted regex to obtain date parts.
+      const result =
+        /(C[0-9]{1}) ?([L|l]unes|[M|m]artes|[M|m]i[e|é]rcoles|[J|j]ueves|[V|v]iernes) ? ([0-9]{2}:[0-9]{2})-?([0-9]{2}:[0-9]{2})/g.exec(
+          date
+        );
+
+      // Return the default date if no result was found.
+      if (!result) {
+        res.push(date);
+        continue;
+      }
+
+      // Obtain its parts.
+      const [original, commission, day, startsAt, endsAt] = result;
+
+      // Map it.
+      res.push(`${day} desde ${startsAt}hs hasta ${endsAt}hs`);
+    }
+
+    return res.join(" y ");
+  }
+
+  /** State that holds if the student is enrolling. */
+  const [isEnrolling, setIsEnrolling] = useState<boolean>(false);
+
+  /** State with the enrollment result. */
+  const [enrollResult, setEnrollResult] = useState<EnrollCourseResponse>();
+
+  /** State that holds a selected commission. */
+  const [selectedCommission, setSelectedCommission] =
+    useState<AvailableCourseCommission>();
+
   return (
     <>
       <h1 className="hidden md:block text-3xl font-bold m-4 text-center">
@@ -93,6 +160,62 @@ export default function CourseInscriptionPanel() {
         <h1 className="my-4 text-xl font-bold md:hidden">
           Inscripción a Cursado
         </h1>
+
+        <Modal
+          isOpen={isSuccessOpen}
+          onOpenChange={onSuccessOpenChange}
+          size="lg"
+          placement="top"
+          backdrop="opaque"
+          isDismissable={false}
+          hideCloseButton={true}
+        >
+          <ModalContent>
+            {(onSucessClose) => (
+              <>
+                <ModalHeader className="flex gap-2 items-center text-green-300">
+                  <CheckIcon /> Inscripción exitosa
+                </ModalHeader>
+                <ModalBody>
+                  <div className="flex flex-col my-4 mx-auto text-sm gap-4">
+                    <p className="text-foreground">
+                      Tu checksum de inscripción es{" "}
+                      <span className="font-semibold">
+                        {enrollResult?.cursado.checksum}
+                      </span>
+                      . Puedes usar este código ante un problema con tu
+                      inscripción.
+                    </p>
+                    <p>
+                      Cursarás tu materia con la comisión de{" "}
+                      <span className="font-semibold">
+                        {selectedCommission?.nombreEspecialidad}
+                      </span>
+                      . Tus horarios de cursado son lo(s){" "}
+                      {parseDateFormat(enrollResult?.cursado.horario ?? "")} en
+                      el edificio {selectedCommission?.edificio}.
+                    </p>
+                    <p className="text-foreground-500">
+                      Si recién abren las inscripciones es posible que no
+                      visualizes esta materia en tus horarios de cursado. No te
+                      preocupes, la universidad publicará los horarios de
+                      cursado en los próximos días.
+                    </p>
+                  </div>
+                </ModalBody>
+                <ModalFooter>
+                  <Button
+                    color="primary"
+                    variant="light"
+                    onPress={() => onSucessClose()}
+                  >
+                    Entendido, gracias
+                  </Button>
+                </ModalFooter>
+              </>
+            )}
+          </ModalContent>
+        </Modal>
 
         <motion.div
           className="w-full"
@@ -157,6 +280,7 @@ export default function CourseInscriptionPanel() {
                   entries={availableCourses.filter(
                     (course) => course.especialidadHomogenea !== "0"
                   )}
+                  setAvailableCourses={setAvailableCourses}
                 />
               </div>
               <motion.div
@@ -181,7 +305,19 @@ export default function CourseInscriptionPanel() {
                 {availableCourses
                   .filter((course) => course.especialidadHomogenea === "0")
                   .map((course, i) => {
-                    return <AvailableCourseEntry course={course} key={i} />;
+                    return (
+                      <AvailableCourseEntry
+                        course={course}
+                        key={i}
+                        setAvailableCourses={setAvailableCourses}
+                        openSuccess={openSuccess}
+                        isEnrolling={isEnrolling}
+                        setIsEnrolling={setIsEnrolling}
+                        setEnrollResult={setEnrollResult}
+                        selectedCommission={selectedCommission}
+                        setSelectedCommission={setSelectedCommission}
+                      />
+                    );
                   })}
               </motion.div>
             </div>

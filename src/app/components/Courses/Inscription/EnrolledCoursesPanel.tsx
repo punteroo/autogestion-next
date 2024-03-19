@@ -2,15 +2,19 @@
 
 import { Accordion, AccordionItem, Spinner } from "@nextui-org/react";
 import { AvailableCourse } from "autogestion-frvm/types";
+import { EnrolledCourseEntry } from "./EnrolledCourseEntry";
+import { Dispatch, SetStateAction } from "react";
 
 type EnrolledCoursesPanelProps = {
   isLoading: boolean;
   entries: Array<AvailableCourse>;
+  setAvailableCourses: Dispatch<SetStateAction<AvailableCourse[]>>;
 };
 
 export default function EnrolledCoursesPanel({
   isLoading,
   entries,
+  setAvailableCourses,
 }: EnrolledCoursesPanelProps) {
   return (
     <Accordion showDivider={false} selectionMode="single" variant="shadow">
@@ -23,7 +27,15 @@ export default function EnrolledCoursesPanel({
             </p>
           </div>
         ) : entries?.length ? (
-          entries.map((enrolledCourse) => null)
+          <div className="flex flex-col gap-3 lg:grid lg:grid-cols-2 2xl:grid-cols-4">
+            {entries.map((enrolledCourse, i) => (
+              <EnrolledCourseEntry
+                key={i}
+                course={enrolledCourse}
+                setAvailableCourses={setAvailableCourses}
+              />
+            ))}
+          </div>
         ) : (
           <p className="text-center text-foreground-400 text-sm mb-4">
             Actualmente no estás inscripto a ningún curso.
