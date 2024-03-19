@@ -2274,7 +2274,7 @@ attr-accept@^2.2.2:
 
 "autogestion-frvm@https://github.com/punteroo/autogestion-frvm.git":
   version "1.4.0"
-  resolved "https://github.com/punteroo/autogestion-frvm.git#d29b2a4e24abacf86a43a1dafda8b72b5a5612c7"
+  resolved "https://github.com/punteroo/autogestion-frvm.git#7f4df748ab14e72605b4e04848ca1ff449bed065"
   dependencies:
     axios "^1.4.0"
     tslib "^2.6.1"

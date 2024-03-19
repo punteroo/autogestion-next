@@ -4,7 +4,6 @@ import { buildClient } from "../../client.wrapper";
 import { NextResponse } from "next/server";
 import { AcademicEntry } from "@/types/api/academic.entry";
 import { UserSession } from "@/lib/types/auth.types";
-import { StudentCourses } from "autogestion-frvm/courses";
 
 // NOTE: This is PURELY for the Vercel deployment. Remove this when on development.
 // export const runtime = 'edge';
@@ -170,9 +169,8 @@ export async function GET(request: Request): Promise<NextResponse | Response> {
       const client = await buildClient(session?.user as UserSession);
 
       // Fetch the academic data from the student.
-      const { detalles: academic } = await (
-        client.courses.student as StudentCourses
-      ).academic.fetch();
+      const { detalles: academic } =
+        await client.courses.student.academic.fetch();
 
       // Format the academic data.
       const formatted = formatAcademicData(academic);
