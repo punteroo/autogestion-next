@@ -5,7 +5,7 @@ import type { ClientSection } from "autogestion-frvm/client";
 export async function buildClient(user: UserSession): Promise<Autogestion> {
   const { academicId, hash } = user;
 
-  const client = new Autogestion(`${academicId}`);
+  const client = new Autogestion(academicId.toString(), undefined);
 
   // Try to login.
   await client.authenticate(hash);
