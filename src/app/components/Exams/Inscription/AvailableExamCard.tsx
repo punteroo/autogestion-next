@@ -11,40 +11,40 @@ type AvailableExamCardProps = {
   setAvailableExams: Dispatch<SetStateAction<AvailableExam[]>>;
 };
 
+/**
+ * Parses the provided level into a readable string.
+ *
+ * @param {string} level The level to parse.
+ *
+ * @returns {string} The parsed level.
+ */
+export function parseCourseLevel(level: string): string {
+  try {
+    const parsed = parseInt(level);
+    switch (parsed) {
+      case 1:
+        return "1er Año";
+      case 2:
+        return "2do Año";
+      case 3:
+        return "3er Año";
+      case 4:
+        return "4to Año";
+      case 5:
+        return "5to Año";
+      default:
+        return "Desconocido";
+    }
+  } catch (e) {
+    return "N/A";
+  }
+}
+
 export default function AvailableExamCard({
   exam,
   setAvailableExams,
 }: AvailableExamCardProps) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
-
-  /**
-   * Parses the provided level into a readable string.
-   *
-   * @param {string} level The level to parse.
-   *
-   * @returns {string} The parsed level.
-   */
-  function parseCourseLevel(level: string): string {
-    try {
-      const parsed = parseInt(level);
-      switch (parsed) {
-        case 1:
-          return "1er Año";
-        case 2:
-          return "2do Año";
-        case 3:
-          return "3er Año";
-        case 4:
-          return "4to Año";
-        case 5:
-          return "5to Año";
-        default:
-          return "Desconocido";
-      }
-    } catch (e) {
-      return "N/A";
-    }
-  }
 
   return (
     <>
